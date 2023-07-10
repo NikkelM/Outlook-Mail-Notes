@@ -11,16 +11,3 @@ export async function saveNote() {
   button.textContent = "Saving...";
   button.disabled = true;
 }
-
-const stylingOptions = {
-  bold: false,
-  italic: false,
-  underline: false,
-  fontSize: 16,
-};
-
-const stylingDiv = document.getElementById("textStyling");
-const boldButton = stylingDiv.querySelector("#boldButton");
-const italicButton = stylingDiv.querySelector("#italicButton");
-const underlineButton = stylingDiv.querySelector("#underlineButton");
-const fontSizeInput = stylingDiv.querySelector("#fontSizeInput");

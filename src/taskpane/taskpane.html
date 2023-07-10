@@ -10,8 +10,14 @@
   <!-- Office JavaScript API -->
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
+  <!-- Include the Quill library -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
   <!-- Template styles -->
   <link href="taskpane.css" rel="stylesheet" type="text/css" />
+
+  <!-- Quill -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 
 <body>
@@ -21,21 +27,27 @@
 
   <main id="app-body">
 
-    <div id="textStyling">
-      <button id="boldButton" class="text-styling-button">
-        <b>B</b>
-      </button>
-      <button id="italicButton" class="text-styling-button">
-        <i>I</i>
-      </button>
-      <button id="underlineButton" class="text-styling-button">
-        <u>U</u>
-      </button>
-      <label for="fontSizeInput">Font size:</label>
-      <input type="number" id="fontSizeInput" min="8" max="72" value="16">
-    </div>
+    <!-- Create the textare container -->
+    <div id="noteInput"></div>
 
-    <textarea id="noteInput"></textarea>
+    <!-- Initialize Quill editor -->
+    <script>
+      var toolbarOptions =
+        [
+          [{ size: ['small', false, 'large', 'huge'] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          ['link', 'image'],
+          [{ 'color': [] }, { 'background': [] }]
+        ];
+
+      var quill = new Quill('#noteInput', {
+        modules: {
+          toolbar: toolbarOptions
+        },
+        placeholder: 'Jot down some notes here...',
+        theme: 'snow'
+      });
+    </script>
 
     <button id="saveNoteButton">
       Save Note
