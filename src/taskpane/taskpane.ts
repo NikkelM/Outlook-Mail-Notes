@@ -1,20 +1,13 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
- * See LICENSE in the project root for license information.
- */
-
 /* global document, Office */
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
-    document.getElementById("sideload-msg").style.display = "none";
-    document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
+    document.getElementById("saveNoteButton").onclick = saveNote;
   }
 });
 
-export async function run() {
-  /**
-   * Insert your Outlook code here
-   */
+export async function saveNote() {
+  const button: HTMLButtonElement = document.getElementById("saveNoteButton") as HTMLButtonElement;
+  button.textContent = "Saving...";
+  button.disabled = true;
 }
