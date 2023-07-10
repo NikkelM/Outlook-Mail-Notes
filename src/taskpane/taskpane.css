@@ -29,6 +29,8 @@ main {
   padding: 10px 20px;
 }
 
+/* Buttons */
+
 button {
   color: #0078d7;
   border: none;
@@ -38,6 +40,43 @@ button {
 
 button:hover,
 button:focus{
+  color: #005a9e;
+  cursor: pointer;
+}
+
+/* Text input */
+
+#noteInput {
+  width: 90%;
+  max-width: 90%;
+  height: 60vh;
+  max-height: 60vh;
+  
+  resize: none;
+  font-size: 16px;
+  font-family: 'Leelawadee UI Web', sans-serif;
+  color: #333;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 10px;
+}
+
+#noteInput:focus, 
+#noteInput:hover {
+  background-color: #f0f0f0;
+}
+
+.text-styling-button {
+  color: #0078d7;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.text-styling-button:hover,
+.text-styling-button:focus{
   color: #005a9e;
   cursor: pointer;
 }

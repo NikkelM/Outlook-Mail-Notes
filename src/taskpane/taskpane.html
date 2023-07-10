@@ -2,16 +2,16 @@
 <html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mail Notes - Outlook</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mail Notes - Outlook</title>
 
-    <!-- Office JavaScript API -->
-    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+  <!-- Office JavaScript API -->
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
-    <!-- Template styles -->
-    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+  <!-- Template styles -->
+  <link href="taskpane.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -20,10 +20,28 @@
   </header>
 
   <main id="app-body">
+
+    <div id="textStyling">
+      <button id="boldButton" class="text-styling-button">
+        <b>B</b>
+      </button>
+      <button id="italicButton" class="text-styling-button">
+        <i>I</i>
+      </button>
+      <button id="underlineButton" class="text-styling-button">
+        <u>U</u>
+      </button>
+      <label for="fontSizeInput">Font size:</label>
+      <input type="number" id="fontSizeInput" min="8" max="72" value="16">
+    </div>
+
+    <textarea id="noteInput"></textarea>
+
     <button id="saveNoteButton">
-		  Save Note
-		</button>
+      Save Note
+    </button>
   </main>
+
 </body>
 
 </html>
