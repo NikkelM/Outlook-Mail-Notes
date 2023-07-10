@@ -62,3 +62,7 @@ button:focus {
 .ql-container.ql-snow {
 	border: 1px solid #ccc !important;
 }
+
+.ql-toolbar.ql-snow {
+	text-align: center !important;
+}
