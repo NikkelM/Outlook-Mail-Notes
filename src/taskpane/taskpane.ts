@@ -24,11 +24,11 @@ Office.onReady(async (info) => {
       modules: {
         toolbar: toolbarOptions,
       },
-      placeholder: "Jot down some notes here.\nUse the toolbar above to style your text!",
+      placeholder: "Jot down some notes here - your changes are automatically saved.\nUse the toolbar above to style your text!",
       theme: "snow",
     });
 
-    document.getElementById("saveNoteButton").onclick = saveNote;
+    document.getElementById("savingNoteButton").onclick = saveNote;
     mailbox = Office.context.mailbox;
     settings = Office.context.roamingSettings;
     mailItem = mailbox.item.itemId;
@@ -50,16 +50,15 @@ async function displayExistingNote() {
 }
 
 async function saveNote() {
-  const button: HTMLButtonElement = document.getElementById("saveNoteButton") as HTMLButtonElement;
+  const button: HTMLButtonElement = document.getElementById("savingNoteButton") as HTMLButtonElement;
+  button.style.display = "inline-block";
 
   const note = quill.getContents();
   settings.set(mailItem, note);
   settings.saveAsync();
-
-  button.textContent = "Saved";
   setTimeout(() => {
-    button.textContent = "Save note";
-  }, 250);
+    button.style.display = "none";
+  }, 1000);
 }
 
 let timeoutId;
@@ -78,7 +77,7 @@ function autosaveNote() {
     }, 750);
   });
 
-  // Changes are always saved after a set timeout, even if the user is still typing
+  // Changes are always saved after a set timeout, even if the user is still typing, but only if there are changes to save
   setInterval(function () {
     if (accumulatedChanges.length() > 0) {
       saveNote();
