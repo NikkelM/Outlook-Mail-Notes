@@ -8,10 +8,10 @@
   <Description DefaultValue="A template to get started."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png"/>
-  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
-  <AppDomains>
+  <SupportUrl DefaultValue="https://github.com/NikkelM/Outlook-Mail-Notes/issues"/>
+  <!-- <AppDomains>
     <AppDomain>https://www.contoso.com</AppDomain>
-  </AppDomains>
+  </AppDomains> -->
   <Hosts>
     <Host Name="Mailbox"/>
   </Hosts>
@@ -62,21 +62,6 @@
                     <SourceLocation resid="Taskpane.Url"/>
                   </Action>
                 </Control>
-                <Control xsi:type="Button" id="ActionButton">
-                  <Label resid="ActionButton.Label"/>
-                  <Supertip>
-                    <Title resid="ActionButton.Label"/>
-                    <Description resid="ActionButton.Tooltip"/>
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16"/>
-                    <bt:Image size="32" resid="Icon.32x32"/>
-                    <bt:Image size="80" resid="Icon.80x80"/>
-                  </Icon>
-                  <Action xsi:type="ExecuteFunction">
-                    <FunctionName>action</FunctionName>
-                  </Action>
-                </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -95,12 +80,10 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Contoso Add-in"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane"/>
-        <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Take notes..."/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
-        <bt:String id="ActionButton.Tooltip" DefaultValue="Perform an action when clicked."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Manage your notes for this mail, conversation or sender."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
