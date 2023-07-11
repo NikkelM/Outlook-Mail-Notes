@@ -44,6 +44,11 @@ button:focus {
 	cursor: pointer;
 }
 
+button:disabled {
+	color: #666;
+	cursor: default;
+}
+
 /* Text input */
 
 #noteInput {
