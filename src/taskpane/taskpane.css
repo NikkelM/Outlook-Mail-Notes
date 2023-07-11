@@ -55,7 +55,6 @@ button:focus {
 	font-size: 16px;
 	color: #333;
 	background-color: #fff;
-	border-radius: 4px;
 	margin: 10px;
 }
 
@@ -65,4 +64,6 @@ button:focus {
 
 .ql-toolbar.ql-snow {
 	text-align: center !important;
+	width: 90%;
+	max-width: 90%;
 }
