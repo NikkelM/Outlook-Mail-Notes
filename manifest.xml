@@ -2,16 +2,13 @@
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
   <Id>fee6895c-5078-4172-8786-37514bbd6d19</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>Contoso</ProviderName>
+  <ProviderName>Nikkel Mollenhauer</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Mail Notes"/>
   <Description DefaultValue="A template to get started."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://github.com/NikkelM/Outlook-Mail-Notes/issues"/>
-  <!-- <AppDomains>
-    <AppDomain>https://www.contoso.com</AppDomain>
-  </AppDomains> -->
   <Hosts>
     <Host Name="Mailbox"/>
   </Hosts>
@@ -79,7 +76,7 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GroupLabel" DefaultValue="Contoso Add-in"/>
+        <bt:String id="GroupLabel" DefaultValue="Mail notes"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Take notes..."/>
       </bt:ShortStrings>
       <bt:LongStrings>
