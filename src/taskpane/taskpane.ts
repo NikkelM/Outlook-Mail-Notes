@@ -1,13 +1,14 @@
 /* global document, Office */
 import Quill from "quill";
+var Delta = Quill.import('delta');
 
 let mailbox: Office.Mailbox;
 let settings: Office.RoamingSettings;
 let mailItem;
-let quill: Quill;
 // let conversation, sender;
+let quill: Quill;
 
-Office.onReady((info) => {
+Office.onReady(async (info) => {
   if (info.host === Office.HostType.Outlook) {
     // All options that should be displayed in the editor toolbar
     var toolbarOptions = [
@@ -34,7 +35,10 @@ Office.onReady((info) => {
     // conversation = mailbox.item.conversationId;
     // sender = mailbox.item.from.emailAddress;
 
-    displayExistingNote();
+    // Load the existing note from storage
+    await displayExistingNote();
+    // Start the autosave timer
+    autosaveNote();
   }
 });
 
@@ -47,12 +51,38 @@ async function displayExistingNote() {
 
 async function saveNote() {
   const button: HTMLButtonElement = document.getElementById("saveNoteButton") as HTMLButtonElement;
-  
+
   const note = quill.getContents();
   settings.set(mailItem, note);
   settings.saveAsync();
+
   button.textContent = "Saved";
   setTimeout(() => {
     button.textContent = "Save note";
-  }, 2000);
+  }, 250);
+}
+
+let timeoutId;
+
+function autosaveNote() {
+  let accumulatedChanges = new Delta();
+
+  quill.on("text-change", function (delta) {
+    accumulatedChanges = accumulatedChanges.compose(delta);
+
+    // Changes are saved after a period of inactivity
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      saveNote();
+      accumulatedChanges = new Delta();
+    }, 750);
+  });
+
+  // Changes are always saved after a set timeout, even if the user is still typing
+  setInterval(function () {
+    if (accumulatedChanges.length() > 0) {
+      saveNote();
+      accumulatedChanges = new Delta();
+    }
+  }, 5000);
 }
