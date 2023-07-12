@@ -70,7 +70,7 @@ async function saveNote(): Promise<void> {
   }, 1000);
 }
 
-let autosaveTimeout: NodeJS.Timeout;
+let autosaveTimeout;
 
 function autosaveNote() {
   let accumulatedChanges = new Delta();

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
-  <Id>fee6895c-5078-4172-8786-37514bbd6d19</Id>
-  <Version>1.0.0.0</Version>
+  <Id>4d810708-b23f-4105-bfab-6301f6d3a8ba</Id>
+  <Version>0.0.1</Version>
   <ProviderName>Nikkel Mollenhauer</ProviderName>
-  <DefaultLocale>en-US</DefaultLocale>
+  <DefaultLocale>en-GB</DefaultLocale>
   <DisplayName DefaultValue="Mail Notes"/>
-  <Description DefaultValue="A template to get started."/>
+  <Description DefaultValue="Easily add notes to e-mails, senders and conversations in Outlook!"/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://github.com/NikkelM/Outlook-Mail-Notes/issues"/>
@@ -25,7 +25,7 @@
       </DesktopSettings>
     </Form>
   </FormSettings>
-  <Permissions>ReadWriteItem</Permissions>
+  <Permissions>ReadItem</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
     <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
   </Rule>
@@ -77,10 +77,10 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Mail notes"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Take notes..."/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Take notes"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Manage your notes for this mail, conversation or sender."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Manage your notes for this e-mail, conversation or sender."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
