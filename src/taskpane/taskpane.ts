@@ -23,6 +23,10 @@ Office.onReady(async (info) => {
     await displayExistingNote();
     // Start the autosave timer
     autosaveNote();
+  } else {
+    console.log("This add-in only supports Outlook clients!");
+    document.getElementById("outsideOutlook").style.display = "block";
+    document.getElementById("insideOutlook").style.display = "none";
   }
 });
 
