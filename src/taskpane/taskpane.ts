@@ -71,23 +71,21 @@ async function saveNote(): Promise<void> {
 }
 
 let autosaveTimeout;
-const savingIcon = document.getElementById("savingIcon");
 
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
   quill.on("text-change", function (delta) {
-    savingIcon.classList.remove("tick");
-    savingIcon.classList.add("spinner");
+    toggleIconSpinner(true);
     savingIcon.style.visibility = "visible";
+
     accumulatedChanges = accumulatedChanges.compose(delta);
 
     // Changes are saved after a period of inactivity
     clearTimeout(autosaveTimeout);
     autosaveTimeout = setTimeout(function () {
       saveNote();
-      savingIcon.classList.remove("spinner");
-      savingIcon.classList.add("tick");
+      toggleIconSpinner(false);
       accumulatedChanges = new Delta();
     }, 750);
   });
@@ -95,10 +93,16 @@ function autosaveNote() {
   // Changes are always saved after a set timeout, even if the user is still typing, but only if there are changes to save
   setInterval(function () {
     if (accumulatedChanges.length() > 0) {
+      // Don't change the icon appearance, as it would get switched back to the spinner by the next text-change event immediately
       saveNote();
-      savingIcon.classList.remove("spinner");
-      savingIcon.classList.add("tick");
       accumulatedChanges = new Delta();
     }
   }, 5000);
+}
+
+const savingIcon = document.getElementById("savingIcon");
+
+function toggleIconSpinner(toSpinner: boolean): void {
+  savingIcon.classList.remove(toSpinner ? "tick" : "spinner");
+  savingIcon.classList.add(toSpinner ? "spinner" : "tick");
 }
