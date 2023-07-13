@@ -55,8 +55,8 @@ async function displayExistingNote(): Promise<void> {
 }
 
 async function saveNote(): Promise<void> {
-  const button: HTMLButtonElement = document.getElementById("savingNoteButton") as HTMLButtonElement;
-  button.style.display = "inline-block";
+  const icon = document.getElementById("savingNotice");
+  icon.style.visibility = "visible";
 
   const note = quill.getContents();
 
@@ -64,24 +64,30 @@ async function saveNote(): Promise<void> {
   settings.set(mailItem, note);
   settings.saveAsync();
 
-  // Hide the button after a timeout
+  // Hide the icon after a timeout
   setTimeout(() => {
-    button.style.display = "none";
+    icon.style.visibility = "hidden";
   }, 1000);
 }
 
 let autosaveTimeout;
+const savingIcon = document.getElementById("savingIcon");
 
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
   quill.on("text-change", function (delta) {
+    savingIcon.classList.remove("tick");
+    savingIcon.classList.add("spinner");
+    savingIcon.style.visibility = "visible";
     accumulatedChanges = accumulatedChanges.compose(delta);
 
     // Changes are saved after a period of inactivity
     clearTimeout(autosaveTimeout);
     autosaveTimeout = setTimeout(function () {
       saveNote();
+      savingIcon.classList.remove("spinner");
+      savingIcon.classList.add("tick");
       accumulatedChanges = new Delta();
     }, 750);
   });
@@ -90,6 +96,8 @@ function autosaveNote() {
   setInterval(function () {
     if (accumulatedChanges.length() > 0) {
       saveNote();
+      savingIcon.classList.remove("spinner");
+      savingIcon.classList.add("tick");
       accumulatedChanges = new Delta();
     }
   }, 5000);

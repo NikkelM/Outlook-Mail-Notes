@@ -29,6 +29,12 @@ main {
 	padding: 10px 20px;
 }
 
+/* Utilities */
+
+.align-right {
+	text-align: right;
+}
+
 /* Buttons */
 
 button {
@@ -71,4 +77,43 @@ button:disabled {
 	text-align: center !important;
 	width: 90%;
 	max-width: 90%;
+}
+
+/* Saving notice */
+
+#savingNotice {
+	width: 90%;
+	max-width: 90%;
+  margin-right: 5px;
+}
+
+#savingNotice .spinner {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	border: 2px solid transparent;
+	border-top-color: #222;
+	border-right-color: #222;
+	animation: spin 1s infinite linear;
+}
+
+#savingNotice .tick {
+  display: inline-block;
+  width: 5px;
+  height: 12px;
+  border-style: solid;
+  border-width: 0 2.5px 2.5px 0;
+  border-color: #555;
+  transform: rotate(45deg);
+  margin-right: 4px;
+}
+  
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
