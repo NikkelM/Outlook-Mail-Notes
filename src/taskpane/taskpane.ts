@@ -8,10 +8,11 @@ let mailItem: string;
 // let conversation, sender;
 let quill: Quill;
 
+// Set up the Quill editor even before the Office.onReady event fires, so that the editor is ready to use as soon as possible
+setupQuill();
+
 Office.onReady(async (info) => {
   if (info.host === Office.HostType.Outlook) {
-    setupQuill();
-
     // Set up references to the mailbox and the current item
     mailbox = Office.context.mailbox;
     settings = Office.context.roamingSettings;
@@ -19,8 +20,11 @@ Office.onReady(async (info) => {
     // conversation = mailbox.item.conversationId;
     // sender = mailbox.item.from.emailAddress;
 
-    // Load a possible existing note from storage
+    // Load a possibly already existing note from storage
     await displayExistingNote();
+
+    fadeOutOverlay();
+
     // Start the autosave timer
     autosaveNote();
   } else {
@@ -56,6 +60,11 @@ async function displayExistingNote(): Promise<void> {
   if (note) {
     quill.setContents(note);
   }
+}
+
+function fadeOutOverlay(): void {
+  const overlay = document.getElementById("overlay");
+  overlay.classList.add("fade-out");
 }
 
 async function saveNote(): Promise<void> {
