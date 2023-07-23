@@ -26,11 +26,10 @@ main {
   align-items: center;
   -webkit-flex: 1 0 0;
   flex: 1 0 0;
-  padding: 10px 20px;
+  min-width: 300px;
 }
 
 /* Utilities */
-
 .align-right {
   text-align: right;
 }
@@ -63,9 +62,10 @@ main {
 }
 
 #contextButtons button {
+  padding: 0;
   flex: 1;
   width: 33%;
-  margin: 0 5px;
+  margin: 0 2px;
   display: inline-block;
   outline: 0;
   text-align: center;
