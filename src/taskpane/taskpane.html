@@ -18,36 +18,37 @@
 </head>
 
 <body>
-    <div id="outsideOutlook" style="display: none; text-align: center;">
-      <h2>This isn't the page you're looking for...</h2>
-      <p>This page hosts the <i>Mail notes</i> Outlook Add-In, which can only be used from within Outlook.</p>
-      <p>To install the Add-In for your Outlook client, please follow the guide on the project's 
-        <a href="https://github.com/NikkelM/Outlook-Mail-Notes"> GitHub page</a></p>
+  <!-- This div is shown if the page is viewed outside of an Outlook context -->
+  <div id="outsideOutlook" style="display: none; text-align: center;">
+    <h2>This isn't the page you're looking for...</h2>
+    <p>This page hosts the <i>Mail notes</i> Outlook Add-In, which can only be used from within Outlook.</p>
+    <p>To install the Add-In for your Outlook client, please follow the guide on the project's 
+      <a href="https://github.com/NikkelM/Outlook-Mail-Notes"> GitHub page</a></p>
+  </div>
+
+  <main id="insideOutlook">
+    <div id="overlay" class="overlay"></div>
+
+    <div id="contextButtons">
+      <button id="emailContextButton" title="Add a note to this e-mail only" class="active">
+        E-Mail
+      </button>
+      <button id="senderContextButton" title="Add a note that will be available in all e-mails from this sender">
+        Sender
+      </button>
+      <button id="conversationContextButton" title="Add a note to the current conversation">
+        Conversation
+      </button>
     </div>
 
-      <main id="insideOutlook">
-        <div id="overlay" class="overlay"></div>
+    <!-- A spinner or tick, depending on the current save-state -->
+    <div id="savingNotice" class="align-right">
+      <span id="savingIcon" class="spinner" style="visibility: hidden;"></span>
+    </div>
 
-        <div id="contextButtons">
-          <button id="emailContextButton" title="Add a note to this e-mail only" class="active">
-            E-Mail
-          </button>
-          <button id="senderContextButton" title="Add a note that will be available in all e-mails from this sender">
-            Sender
-          </button>
-          <button id="conversationContextButton" title="Add a note to the current conversation">
-            Conversation
-          </button>
-        </div>
-
-        <!-- A spinner or tick, depending on the current save-state -->
-        <div id="savingNotice" class="align-right">
-          <span id="savingIcon" class="spinner" style="visibility: hidden;"></span>
-        </div>
-
-        <!-- Create the Quill container -->
-        <div id="noteInput"></div>
-    </main>
+    <!-- Create the Quill container -->
+    <div id="noteInput"></div>
+  </main>
 
 </body>
 
