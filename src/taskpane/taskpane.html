@@ -28,7 +28,17 @@
       <main id="insideOutlook">
         <div id="overlay" class="overlay"></div>
 
-        <h2>Scope: E-Mail</h2>
+        <div id="contextButtons">
+          <button id="emailContextButton" title="Add a note to this e-mail only" class="active">
+            E-Mail
+          </button>
+          <button id="senderContextButton" title="Add a note that will be available in all e-mails from this sender">
+            Sender
+          </button>
+          <button id="conversationContextButton" title="Add a note to the current conversation">
+            Conversation
+          </button>
+        </div>
 
         <!-- A spinner or tick, depending on the current save-state -->
         <div id="savingNotice" class="align-right">
