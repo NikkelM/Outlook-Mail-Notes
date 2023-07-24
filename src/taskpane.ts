@@ -1,11 +1,14 @@
+// Contains the logic for the main Add-In taskpane
 /* global document, Office */
 import Quill from "quill";
 var Delta = Quill.import("delta");
 
-let mailbox: Office.Mailbox;
+import { getIdentifiers, getSettings } from "./officeData";
+import { updateVersion } from "./versionUpdate";
+import { setActiveContext, getActiveContext } from "./contextButtons";
+
+let mailId: string, senderId: string, conversationId: string;
 let settings: Office.RoamingSettings;
-let mailItem: string;
-// let conversation, sender;
 let quill: Quill;
 
 // Set up the Quill editor even before the Office.onReady event fires, so that the editor is ready to use as soon as possible
@@ -13,12 +16,11 @@ setupQuill();
 
 Office.onReady(async (info) => {
   if (info.host === Office.HostType.Outlook) {
-    // Set up references to the mailbox and the current item
-    mailbox = Office.context.mailbox;
-    settings = Office.context.roamingSettings;
-    mailItem = mailbox.item.itemId;
-    // conversation = mailbox.item.conversationId;
-    // sender = mailbox.item.from.emailAddress;
+    // Get the identifiers for the current item
+    ({ mailId, senderId, conversationId } = getIdentifiers());
+
+    settings = getSettings();
+    updateVersion(settings);
 
     // Load a possibly already existing note from storage
     await displayExistingNote();
@@ -56,9 +58,21 @@ function setupQuill(): void {
 }
 
 async function displayExistingNote(): Promise<void> {
-  const note = await settings.get(mailItem);
-  if (note) {
-    quill.setContents(note);
+  // Try to get an existing note for any of the contexts, in descending priority/specificity
+  const allNotes = await settings.get("notes");
+  const mailNote = allNotes[mailId];
+  const conversationNote = allNotes[conversationId];
+  const senderNote = allNotes[senderId];
+
+  if (mailNote) {
+    quill.setContents(mailNote.noteContents);
+    setActiveContext("mail");
+  } else if (conversationNote) {
+    quill.setContents(conversationNote.noteContents);
+    setActiveContext("conversation");
+  } else if (senderNote) {
+    quill.setContents(senderNote.noteContents);
+    setActiveContext("sender");
   }
 }
 
@@ -71,10 +85,32 @@ async function saveNote(): Promise<void> {
   const icon = document.getElementById("savingNotice");
   icon.style.visibility = "visible";
 
-  const note = quill.getContents();
+  const newNoteContents = quill.getContents();
+  const activeContext = getActiveContext();
+  const allNotes = await settings.get("notes");
+  console.log(activeContext)
+
+  switch (activeContext) {
+    case "mail":
+      console.log("savingMail")
+      allNotes[mailId] = allNotes[mailId] ?? {};
+      allNotes[mailId].noteContents = newNoteContents;
+      allNotes[mailId].lastEdited = new Date().toISOString();
+      break;
+    case "sender":
+      allNotes[senderId] = allNotes[senderId] ?? {};
+      allNotes[senderId].noteContents = newNoteContents;
+      allNotes[senderId].lastEdited = new Date().toISOString();
+      break;
+    case "conversation":
+      allNotes[conversationId] = allNotes[conversationId] ?? {};
+      allNotes[conversationId].noteContents = newNoteContents;
+      allNotes[conversationId].lastEdited = new Date().toISOString();
+      break;
+  }
 
   // Save the note to storage
-  settings.set(mailItem, note);
+  settings.set("notes", allNotes);
   settings.saveAsync();
 
   // Hide the icon after a timeout
