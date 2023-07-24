@@ -40,7 +40,6 @@ function setupQuill(): void {
 }
 
 let autosaveTimeout;
-
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
@@ -98,30 +97,6 @@ async function saveNote(): Promise<void> {
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString();
   }
-
-  //   switch (activeContext) {
-  //     case "mail":
-  //       if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
-  //         delete allNotes[mailId];
-  //       } else {
-  //         updateNote(mailId);
-  //       }
-  //       break;
-  //     case "sender":
-  //       if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
-  //         delete allNotes[senderId];
-  //       } else {
-  //         updateNote(senderId);
-  //       }
-  //       break;
-  //     case "conversation":
-  //       if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
-  //         delete allNotes[conversationId];
-  //       } else {
-  //         updateNote(conversationId);
-  //       }
-  //       break;
-  //   }
 
   // Save the note to storage
   settings.set("notes", allNotes);
