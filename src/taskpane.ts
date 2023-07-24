@@ -130,12 +130,19 @@ async function saveNote(): Promise<void> {
   }, 1000);
 }
 
-let autosaveTimeout;
+let autosaveTimeout, previousContext: string;
 
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
   quill.on("text-change", function (delta) {
+    // If the context was changed, we do not want to display the saving icon
+    if (getActiveContext() !== previousContext) {
+      previousContext = getActiveContext();
+      savingIcon.style.visibility = "hidden";
+      return;
+    }
+
     toggleIconSpinner(true);
     savingIcon.style.visibility = "visible";
 
