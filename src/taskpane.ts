@@ -36,6 +36,7 @@ Office.onReady(async (info) => {
   }
 });
 
+// TODO: Move this to another file
 function setupQuill(): void {
   // All options that should be displayed in the editor toolbar
   var toolbarOptions = [
@@ -89,21 +90,33 @@ async function saveNote(): Promise<void> {
   const activeContext = getActiveContext();
   const allNotes = await settings.get("notes");
 
+  const updateNote = (noteId: string) => {
+    allNotes[noteId] = allNotes[noteId] ?? {};
+    allNotes[noteId].noteContents = newNoteContents;
+    allNotes[noteId].lastEdited = new Date().toISOString();
+  };
+
   switch (activeContext) {
     case "mail":
-      allNotes[mailId] = allNotes[mailId] ?? {};
-      allNotes[mailId].noteContents = newNoteContents;
-      allNotes[mailId].lastEdited = new Date().toISOString();
+      if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
+        delete allNotes[mailId];
+      } else {
+        updateNote(mailId);
+      }
       break;
     case "sender":
-      allNotes[senderId] = allNotes[senderId] ?? {};
-      allNotes[senderId].noteContents = newNoteContents;
-      allNotes[senderId].lastEdited = new Date().toISOString();
+      if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
+        delete allNotes[senderId];
+      } else {
+        updateNote(senderId);
+      }
       break;
     case "conversation":
-      allNotes[conversationId] = allNotes[conversationId] ?? {};
-      allNotes[conversationId].noteContents = newNoteContents;
-      allNotes[conversationId].lastEdited = new Date().toISOString();
+      if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
+        delete allNotes[conversationId];
+      } else {
+        updateNote(conversationId);
+      }
       break;
   }
 
@@ -147,6 +160,7 @@ function autosaveNote() {
   }, 5000);
 }
 
+// TODO: Move this to another file
 const savingIcon = document.getElementById("savingIcon");
 
 function toggleIconSpinner(toSpinner: boolean): void {
