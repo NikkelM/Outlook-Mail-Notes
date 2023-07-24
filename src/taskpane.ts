@@ -10,6 +10,8 @@ import { setActiveContext, getActiveContext } from "./context";
 let mailId: string, senderId: string, conversationId: string;
 let settings: Office.RoamingSettings;
 let quill: Quill;
+// Used to determine whether or not to show the autosave icon
+let previousContext: string;
 
 // Set up the Quill editor even before the Office.onReady event fires, so that the editor is ready to use as soon as possible
 setupQuill();
@@ -28,6 +30,7 @@ Office.onReady(async (info) => {
     fadeOutOverlay();
 
     // Start the autosave timer
+    previousContext = getActiveContext();
     autosaveNote();
   } else {
     console.log("This add-in only supports Outlook clients!");
@@ -128,7 +131,7 @@ async function saveNote(): Promise<void> {
   }, 1000);
 }
 
-let autosaveTimeout, previousContext: string;
+let autosaveTimeout;
 
 function autosaveNote() {
   let accumulatedChanges = new Delta();
@@ -136,6 +139,7 @@ function autosaveNote() {
   quill.on("text-change", function (delta) {
     // If the context was changed, we do not want to display the saving icon
     if (getActiveContext() !== previousContext) {
+      console.log('change')
       previousContext = getActiveContext();
       savingIcon.style.visibility = "hidden";
       return;
