@@ -40,11 +40,9 @@ Office.onReady(async (info) => {
 function setupQuill(): void {
   // All options that should be displayed in the editor toolbar
   var toolbarOptions = [
-    [{ size: ["small", false, "large", "huge"] }],
     ["bold", "italic", "underline", "strike"],
-    ["link", "image"],
-    [{ color: [] }, { background: [] }],
-    [{ list: "ordered" }, { list: "bullet" }],
+    ["link"],
+    [{ list: "ordered" }, { list: "bullet" }]
   ];
 
   // Defines the Quill editor
@@ -160,9 +158,9 @@ function autosaveNote() {
   // Changes are always saved after a set timeout, even if the user is still typing, but only if there are changes to save
   setInterval(function () {
     if (accumulatedChanges.length() > 0) {
-      // Don't change the icon appearance, as it would get switched back to the spinner by the next text-change event immediately
       saveNote();
       accumulatedChanges = new Delta();
+      // Don't change the icon appearance, as it would get switched back to the spinner by the next text-change event immediately
     }
   }, 5000);
 }
