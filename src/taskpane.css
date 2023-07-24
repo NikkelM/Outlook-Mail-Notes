@@ -50,7 +50,6 @@ p {
 }
 
 .overlay.fade-out {
-  /* If the animation timing here is changes, change it in the corresponding function as well */
   transition: opacity 0.25s ease-in-out;
   opacity: 0;
 }
