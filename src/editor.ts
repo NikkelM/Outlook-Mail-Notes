@@ -2,7 +2,7 @@ import Quill from "quill";
 var Delta = Quill.import("delta");
 
 import { getSettings, getIdentifiers } from "./officeData";
-import { getActiveContext, loadNoteForContext, setActiveContext } from "./context";
+import { getActiveContext, switchToContext } from "./context";
 
 export let quill: Quill;
 let mailId: string, senderId: string, conversationId: string;
@@ -50,14 +50,11 @@ async function displayInitialNote(): Promise<void> {
   const senderNote = allNotes[senderId];
 
   if (mailNote) {
-    setActiveContext("mail");
-    loadNoteForContext("mail", quill, mailId, settings);
+    switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
-    setActiveContext("conversation");
-    loadNoteForContext("conversation", quill, conversationId, settings);
+    switchToContext("conversation", quill, conversationId, settings);
   } else if (senderNote) {
-    setActiveContext("sender");
-    loadNoteForContext("sender", quill, senderId, settings);
+    switchToContext("sender", quill, senderId, settings);
   }
 }
 

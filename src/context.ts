@@ -13,8 +13,7 @@ let activeContext;
 
 for (const [key, button] of Object.entries(contextButtons)) {
   button.addEventListener("click", () => {
-    setActiveContext(key);
-    loadNoteForContext(key);
+    switchToContext(key);
   });
 }
 
@@ -24,7 +23,24 @@ export function initContextButtons() {
   setActiveContext("mail");
 }
 
-export function setActiveContext(context: string) {
+export function getActiveContext(): string {
+  return activeContext;
+}
+
+export function switchToContext(
+  context: string,
+  quill?: Quill,
+  itemId?: string,
+  settings?: Office.RoamingSettings
+): void {
+  if (context === activeContext) {
+    return;
+  }
+  setActiveContext(context);
+  loadNoteForContext(context, quill, itemId, settings);
+}
+
+function setActiveContext(context: string) {
   const button = contextButtons[context];
   if (!button) {
     throw new Error("Invalid context");
@@ -41,16 +57,7 @@ export function setActiveContext(context: string) {
   activeContext = context;
 }
 
-export function getActiveContext(): string {
-  return activeContext;
-}
-
-export async function loadNoteForContext(
-  context: string,
-  quill?: Quill,
-  itemId?: string,
-  settings?: Office.RoamingSettings
-) {
+async function loadNoteForContext(context: string, quill?: Quill, itemId?: string, settings?: Office.RoamingSettings) {
   if (!settings) {
     settings = getSettings();
   }
