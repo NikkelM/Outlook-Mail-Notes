@@ -21,7 +21,7 @@ for (const [key, button] of Object.entries(contextButtons)) {
 export function initContextButtons() {
   // Set the initial active button
   contextButtons.mail.classList.add("active");
-  activeContext = "mail";
+  setActiveContext("mail");
 }
 
 export function setActiveContext(context: string) {
