@@ -1,5 +1,6 @@
 # Custom
 .vscode
+src/version.ts
 
 # Logs
 logs

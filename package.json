@@ -1,7 +1,7 @@
 {
 	"name": "outlook-mail-notes",
 	"description": "Easily add notes to e-mails, senders & conversations in Outlook!",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"author": "Nikkel Mollenhauer",
 	"repository": {
 		"type": "git",
@@ -19,12 +19,9 @@
 		"lint": "office-addin-lint check",
 		"lint:fix": "office-addin-lint fix",
 		"prettier": "office-addin-lint prettier",
-		"start": "office-addin-debugging start manifest.xml",
-		"start:desktop": "office-addin-debugging start manifest.xml desktop",
-		"start:web": "office-addin-debugging start manifest.xml web",
-		"stop": "office-addin-debugging stop manifest.xml",
+		"start": "npm run prebuild & office-addin-debugging start manifest.xml",
 		"validate": "office-addin-manifest validate manifest.xml",
-		"watch": "webpack --mode development --watch"
+		"prebuild": "node -p \"'export const ADDIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts"
 	},
 	"dependencies": {
 		"core-js": "^3.9.1",
