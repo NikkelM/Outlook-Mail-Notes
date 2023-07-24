@@ -8,7 +8,9 @@ export function getIdentifiers() {
   return {
     mailId: mailbox.item.itemId,
     senderId: mailbox.item.from.emailAddress,
-    conversationId: mailbox.item.conversationId
+    conversationId: mailbox.item.conversationId,
+    itemSubject: mailbox.item.subject,
+    itemNormalizedSubject: mailbox.item.normalizedSubject
   };
 }
 
