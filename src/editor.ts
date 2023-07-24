@@ -5,7 +5,7 @@ import { getSettings, getIdentifiers } from "./officeData";
 import { getActiveContext, switchToContext } from "./context";
 
 export let quill: Quill;
-let mailId: string, senderId: string, conversationId: string;
+let mailId: string, senderId: string, conversationId: string, itemSubject: string, itemNormalizedSubject: string;
 let settings: Office.RoamingSettings;
 // Used to determine whether or not to show the autosave icon
 let previousContext: string;
@@ -16,7 +16,7 @@ setupQuill();
 // ----- Setup -----
 export async function setupEditor(): Promise<void> {
   // Get the identifiers for the current item
-  ({ mailId, senderId, conversationId } = getIdentifiers());
+  ({ mailId, senderId, conversationId, itemSubject, itemNormalizedSubject } = getIdentifiers());
 
   settings = getSettings();
 
@@ -50,11 +50,14 @@ async function displayInitialNote(): Promise<void> {
   const senderNote = allNotes[senderId];
 
   if (mailNote) {
-    switchToContext("mail", quill, mailId, settings);
+    await switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
-    switchToContext("conversation", quill, conversationId, settings);
+    await switchToContext("conversation", quill, conversationId, settings);
   } else if (senderNote) {
-    switchToContext("sender", quill, senderId, settings);
+    await switchToContext("sender", quill, senderId, settings);
+  } else {
+    // The default context is the mail context
+    await switchToContext("mail", quill, mailId, settings);
   }
 }
 
@@ -66,7 +69,6 @@ function autosaveNote() {
   quill.on("text-change", function (delta) {
     // If the context was changed, we do not want to display the saving icon
     if (getActiveContext() !== previousContext) {
-      console.log("change");
       previousContext = getActiveContext();
       savingIcon.style.visibility = "hidden";
       return;
