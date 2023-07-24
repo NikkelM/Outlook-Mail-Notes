@@ -5,7 +5,7 @@ var Delta = Quill.import("delta");
 
 import { getIdentifiers, getSettings } from "./officeData";
 import { updateVersion } from "./versionUpdate";
-import { setActiveContext, getActiveContext } from "./contextButtons";
+import { setActiveContext, getActiveContext } from "./context";
 
 let mailId: string, senderId: string, conversationId: string;
 let settings: Office.RoamingSettings;
@@ -88,11 +88,9 @@ async function saveNote(): Promise<void> {
   const newNoteContents = quill.getContents();
   const activeContext = getActiveContext();
   const allNotes = await settings.get("notes");
-  console.log(activeContext)
 
   switch (activeContext) {
     case "mail":
-      console.log("savingMail")
       allNotes[mailId] = allNotes[mailId] ?? {};
       allNotes[mailId].noteContents = newNoteContents;
       allNotes[mailId].lastEdited = new Date().toISOString();
