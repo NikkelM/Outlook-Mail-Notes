@@ -2,7 +2,7 @@ import Quill from "quill";
 var Delta = Quill.import("delta");
 
 import { getSettings, getIdentifiers } from "./officeData";
-import { getActiveContext } from "./context";
+import { getActiveContext, setActiveContext } from "./context";
 
 export let quill: Quill;
 let mailId: string, senderId: string, conversationId: string;
@@ -13,11 +13,14 @@ let previousContext: string;
 // Set up the Quill editor even before the Office.onReady event fires, so that the editor is ready to use as soon as possible
 setupQuill();
 
-export function setupEditor(): void {
+// ----- Setup -----
+export async function setupEditor(): Promise<void> {
   // Get the identifiers for the current item
   ({ mailId, senderId, conversationId } = getIdentifiers());
 
   settings = getSettings();
+
+  await displayInitialNote();
 
   // Start the autosave timer
   previousContext = getActiveContext();
@@ -39,6 +42,26 @@ function setupQuill(): void {
   });
 }
 
+async function displayInitialNote(): Promise<void> {
+  // Try to get an existing note for any of the contexts, in descending priority/specificity
+  const allNotes = await settings.get("notes");
+  const mailNote = allNotes[mailId];
+  const conversationNote = allNotes[conversationId];
+  const senderNote = allNotes[senderId];
+
+  if (mailNote) {
+    quill.setContents(mailNote.noteContents);
+    setActiveContext("mail");
+  } else if (conversationNote) {
+    quill.setContents(conversationNote.noteContents);
+    setActiveContext("conversation");
+  } else if (senderNote) {
+    quill.setContents(senderNote.noteContents);
+    setActiveContext("sender");
+  }
+}
+
+// ----- Note saving -----
 let autosaveTimeout;
 function autosaveNote() {
   let accumulatedChanges = new Delta();
@@ -76,6 +99,14 @@ function autosaveNote() {
   }, 5000);
 }
 
+// The autosave icon
+const savingIcon = document.getElementById("savingIcon");
+
+function toggleIconSpinner(toSpinner: boolean): void {
+  savingIcon.classList.remove(toSpinner ? "tick" : "spinner");
+  savingIcon.classList.add(toSpinner ? "spinner" : "tick");
+}
+
 async function saveNote(): Promise<void> {
   const icon = document.getElementById("savingNotice");
   icon.style.visibility = "visible";
@@ -106,12 +137,4 @@ async function saveNote(): Promise<void> {
   setTimeout(() => {
     icon.style.visibility = "hidden";
   }, 1000);
-}
-
-// The autosave icon
-const savingIcon = document.getElementById("savingIcon");
-
-function toggleIconSpinner(toSpinner: boolean): void {
-  savingIcon.classList.remove(toSpinner ? "tick" : "spinner");
-  savingIcon.classList.add(toSpinner ? "spinner" : "tick");
 }
