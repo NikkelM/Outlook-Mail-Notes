@@ -17,27 +17,21 @@ for (const [key, button] of Object.entries(contextButtons)) {
   });
 }
 
-export function initContextButtons() {
-  // Set the initial active button
-  contextButtons.mail.classList.add("active");
-  setActiveContext("mail");
-}
-
 export function getActiveContext(): string {
   return activeContext;
 }
 
-export function switchToContext(
+export async function switchToContext(
   context: string,
   quill?: Quill,
   itemId?: string,
   settings?: Office.RoamingSettings
-): void {
+): Promise<void> {
   if (context === activeContext) {
     return;
   }
   setActiveContext(context);
-  loadNoteForContext(context, quill, itemId, settings);
+  await loadNoteForContext(context, quill, itemId, settings);
 }
 
 function setActiveContext(context: string) {

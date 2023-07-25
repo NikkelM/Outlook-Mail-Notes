@@ -29,10 +29,6 @@ main {
   min-width: 300px;
 }
 
-p {
-  margin: 15px 0 0 0;
-}
-
 /* Utilities */
 .align-right {
   text-align: right;
@@ -55,7 +51,6 @@ p {
 }
 
 /* Buttons */
-
 /* The button container */
 #contextButtons {
   display: flex;
@@ -124,8 +119,8 @@ p {
 #noteInput {
   width: 90%;
   max-width: 90%;
-  height: 60vh;
-  max-height: 60vh;
+  height: 80vh;
+  max-height: 80vh;
   font-size: 16px;
   color: #333;
   background-color: #fff;
