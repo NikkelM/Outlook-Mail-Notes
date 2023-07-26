@@ -56,7 +56,7 @@ main {
   display: flex;
   justify-content: space-around;
   width: 90%;
-  margin: 15px 0 0 0;
+  margin: 15px 0 10px 0;
 }
 
 #contextButtons button {
