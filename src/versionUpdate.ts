@@ -11,8 +11,7 @@ export async function updateVersion(settings: Office.RoamingSettings) {
 
     if (currentVersion < "0.0.2") {
       // Move all note data from the root of the settings object to the "notes" property
-      // Also add a "lastEdited" property to each note
-      const notes = {};
+      let notes = {};
       for (const key in settings["settingsData"]) {
         if (key !== "version") {
           notes[key] = {};

@@ -11,7 +11,7 @@ Office.onReady(async (info) => {
   if (info.host === Office.HostType.Outlook) {
     // Check if the add-in has been updated since the last time it was opened
     settings = getSettings();
-    updateVersion(settings);
+    await updateVersion(settings);
 
     await setupEditor();
 
