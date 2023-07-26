@@ -1,6 +1,6 @@
 name: Deploy Add-In
 
-on: workflow_dispatch
+on: [workflow_dispatch, workflow_call]
 
 jobs:
   deploy:

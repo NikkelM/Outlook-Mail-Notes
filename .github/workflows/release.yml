@@ -64,5 +64,5 @@ jobs:
           name: v${{ needs.CheckVersion.outputs.newVersion }}
           body_path: CHANGELOG.md
 
-      - name: Run deploy action
-        uses: ./.github/workflows/deploy.yml
+  RunDeployScript:
+    uses: ./.github/workflows/deploy.yml
