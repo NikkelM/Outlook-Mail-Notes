@@ -65,4 +65,6 @@ jobs:
           body_path: CHANGELOG.md
 
   RunDeployScript:
+    needs: CheckVersion
+    if: needs.CheckVersion.outputs.versionChanged == 'true'
     uses: ./.github/workflows/deploy.yml
