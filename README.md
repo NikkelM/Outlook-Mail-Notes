@@ -9,7 +9,7 @@ The notes are synced with your Exchange account, which allows you to access them
 
 - Use *Home* > *Get Add-Ins* to navigate to the *Add-Ins* page (note that Add-Ins can only be installed in mail clients that are connected to an Exchange server, i.e. IMAP accounts cannot use Add-Ins).
 - Go to the *My Add-Ins* tab, scroll to the bottom and click on the *+ Add a custom add-in* button.
-	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.github.io/Outlook-Mail-Notes/manifest.xml`
+	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
 	- Alternatively, follow the instructions in the [Manual Installation](#manual-installation) section below to install the Add-In from a local file.
 - The Add-In will now be available in the *Home* tab of your Outlook client. You can use it by selecting an e-mail and clicking on the *Take notes* button.
 
@@ -17,7 +17,7 @@ The notes are synced with your Exchange account, which allows you to access them
 
 - Using Outlook for the Web, click on the gear icon in the top right corner and select *Manage Add-Ins*.
 - Use the *+* button to add a new Add-In.
-	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.github.io/Outlook-Mail-Notes/manifest.xml`
+	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
 	- Alternatively, follow the instructions in the [Manual Installation](#manual-installation) section below to install the Add-In from a local file.
 - The Add-In will now be available when viewing an e-mail, its icon will be visible in the top right corner of the e-mail.
 
