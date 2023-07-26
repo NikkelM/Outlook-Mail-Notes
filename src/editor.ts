@@ -28,6 +28,18 @@ export async function setupEditor(): Promise<void> {
 }
 
 function setupQuill(): void {
+  var Link = Quill.import("formats/link");
+  class MyLink extends Link {
+    static create(value) {
+      if (!value.startsWith("http://") && !value.startsWith("https://")) {
+        value = "http://" + value;
+      }
+      const node = super.create(value);
+      return node;
+    }
+  }
+  Quill.register(MyLink, true);
+
   // All options that should be displayed in the editor toolbar
   var toolbarOptions = [["bold", "italic", "underline", "strike"], ["link"], [{ list: "ordered" }, { list: "bullet" }]];
 
