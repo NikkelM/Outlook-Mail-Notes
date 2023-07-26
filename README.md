@@ -9,25 +9,30 @@ The notes are synced with your Exchange account, which allows you to access them
 
 - Use *Home* > *Get Add-Ins* to navigate to the *Add-Ins* page (note that Add-Ins can only be installed in mail clients that are connected to an Exchange server, i.e. IMAP accounts cannot use Add-Ins).
 - Go to the *My Add-Ins* tab, scroll to the bottom and click on the *+ Add a custom add-in* button.
-	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
-	- Alternatively, follow the instructions in the [Manual Installation](#manual-installation) section below to install the Add-In from a local file.
+- Select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
 - The Add-In will now be available in the *Home* tab of your Outlook client. You can use it by selecting an e-mail and clicking on the *Take notes* button.
 
 ### Outlook for the Web
 
 - Using Outlook for the Web, click on the gear icon in the top right corner and select *Manage Add-Ins*.
 - Use the *+* button to add a new Add-In.
-	- To always automatically get the latest version of the Add-In, select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
-	- Alternatively, follow the instructions in the [Manual Installation](#manual-installation) section below to install the Add-In from a local file.
+- Select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
 - The Add-In will now be available when viewing an e-mail, its icon will be visible in the top right corner of the e-mail.
 
-### Manual Installation
+## Updates
 
-- Clone the repository or download a relevant release and navigate to the project folder.
-- Run `npm install` to install all required dependencies.
-- Run `npm run build` to build the project. All relevant files will be placed in the `dist` folder.
-- Follow the first steps of the relevant [Installation](#installation) section above, but select *Add from file* instead of *Add from URL*.
-- Select the `manifest.xml` file from the `dist` folder. *Note that by installing the Add-In from your local machine will prevent you from receiving any relevant updates.*
+*TL;DR: Updates to the Add-In's main functionality will be automatically applied, but updates to the Add-In's `manifest.xml` file require a re-installation due to how Add-In sideloading works.*
+
+Office Add-Ins are hosted on the developer's server - in the case of this Add-In, this is `https://nikkelm.dev`.
+All files, such as the displayed note editor and relevant background logic are hosted on this server, and not downloaded to your machine.
+This means that any released updates will automatically reflect in your client.
+
+Please note that while you will automatically receive any updates to the files the Add-In uses in the background, Outlook will **not** automatically update the Add-In's `manifest.xml`.
+This means that in the case that anything in this file is changed, this will not reflect in your client until you manually remove and re-add the Add-In.
+Unless the Add-In breaks, and until I am able to add an option to export/import notes, I highly discourage you from doing this, as all of your notes will be lost.
+Changes to the `manifest.xml` file will not happen frequently, as doing so is only necessary when adding new ways to interact with the Add-In from within the Outlook client.
+
+In any case, always feel free to open an [issue](https://github.com/NikkelM/Outlook-Mail-Notes/issues) if you have any questions or concerns.  
 
 ## Contribute
 
@@ -38,3 +43,5 @@ The notes are synced with your Exchange account, which allows you to access them
 ----
 
 Do you have any feedback or questions? Feel free to open an [issue](https://github.com/NikkelM/Outlook-Mail-Notes/issues).
+
+If you enjoy this Add-In and want to say thanks, consider buying me a [coffee](https://ko-fi.com/nikkelm) or [sponsoring](https://github.com/sponsors/NikkelM) this project.
