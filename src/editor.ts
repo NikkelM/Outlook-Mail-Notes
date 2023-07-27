@@ -85,14 +85,19 @@ async function displayInitialNote(): Promise<void> {
     await switchToContext("mail", quill, mailId, settings);
   }
 
-  if(anyNoteExisted) {
+  if (anyNoteExisted) {
     manageItemCategories(true);
   } else {
     manageItemCategories(false);
   }
 }
 
-async function pre1_2_0Update(mailId: string, allNotes: any, pre1_2_0Notes: any, settings: Office.RoamingSettings): Promise<string> {
+async function pre1_2_0Update(
+  mailId: string,
+  allNotes: any,
+  pre1_2_0Notes: any,
+  settings: Office.RoamingSettings
+): Promise<string> {
   // Generate the new ItemId
   const newItemId =
     Office.context.mailbox.item.conversationId +
@@ -180,7 +185,13 @@ async function saveNote(): Promise<void> {
   if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
     delete allNotes[contextMapping[activeContext]];
 
-    manageItemCategories(false);
+    // If no note exists for any eligible context, delete the category
+    const mailNote = allNotes[mailId];
+    const conversationNote = allNotes[conversationId];
+
+    if (!mailNote && !conversationNote) {
+      manageItemCategories(false);
+    }
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
