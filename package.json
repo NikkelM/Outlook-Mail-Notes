@@ -1,7 +1,7 @@
 {
 	"name": "outlook-mail-notes",
 	"description": "Easily add notes to e-mails, senders & conversations in Outlook!",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"author": "Nikkel Mollenhauer",
 	"repository": {
 		"type": "git",
