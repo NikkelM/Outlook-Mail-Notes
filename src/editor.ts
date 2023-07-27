@@ -57,9 +57,17 @@ function setupQuill(): void {
 async function displayInitialNote(): Promise<void> {
   // Try to get an existing note for any of the contexts, in descending priority/specificity
   const allNotes = await settings.get("notes");
-  const mailNote = allNotes[mailId];
+  let mailNote = allNotes[mailId];
   const conversationNote = allNotes[conversationId];
   const senderNote = allNotes[senderId];
+
+  // With v1.2.0, the mailId was changed from using the item.itemId to use item.conversationId_item.dateTimeCreated.toISOString()
+  // We need to check if the current item is still using the old ID format, and if so, update it
+  const pre1_2_0Notes = await settings.get("pre1_2_0Notes");
+  if (pre1_2_0Notes) {
+    console.log("Checking for pre-1.2.0 note");
+    mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
+  }
 
   if (mailNote) {
     await switchToContext("mail", quill, mailId, settings);
@@ -71,6 +79,32 @@ async function displayInitialNote(): Promise<void> {
     // The default context is the mail context
     await switchToContext("mail", quill, mailId, settings);
   }
+}
+
+async function pre1_2_0Update(mailId: string, allNotes: any, pre1_2_0Notes: any, settings: Office.RoamingSettings): Promise<string> {
+  // Generate the new ItemId
+  const newItemId =
+    Office.context.mailbox.item.conversationId +
+    "_" +
+    new Date(Office.context.mailbox.item.dateTimeCreated).toISOString();
+
+  if (pre1_2_0Notes[mailId]) {
+    allNotes[newItemId] = {};
+    allNotes[newItemId].noteContents = allNotes[mailId].noteContents;
+    allNotes[newItemId].lastEdited = allNotes[mailId].lastEdited;
+    delete pre1_2_0Notes[mailId];
+    delete allNotes[mailId];
+
+    if (Object.keys(pre1_2_0Notes).length === 0) {
+      settings.remove("pre1_2_0Notes");
+    } else {
+      settings.set("pre1_2_0Notes", pre1_2_0Notes);
+    }
+
+    settings.set("notes", allNotes);
+    settings.saveAsync();
+  }
+  return newItemId;
 }
 
 // ----- Note saving -----
@@ -137,7 +171,7 @@ async function saveNote(): Promise<void> {
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
-    allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString();
+    allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
   }
 
   // Save the note to storage
