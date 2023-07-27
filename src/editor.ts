@@ -69,15 +69,26 @@ async function displayInitialNote(): Promise<void> {
     mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
   }
 
+  let anyNoteExisted = true;
   if (mailNote) {
     await switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
     await switchToContext("conversation", quill, conversationId, settings);
   } else if (senderNote) {
+    // We don't want to clutter the interface with sender notes
+    // TODO: Make this configurable!
+    anyNoteExisted = false;
     await switchToContext("sender", quill, senderId, settings);
   } else {
+    anyNoteExisted = false;
     // The default context is the mail context
     await switchToContext("mail", quill, mailId, settings);
+  }
+
+  if(anyNoteExisted) {
+    manageItemCategories(true);
+  } else {
+    manageItemCategories(false);
   }
 }
 
@@ -169,13 +180,13 @@ async function saveNote(): Promise<void> {
   if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
     delete allNotes[contextMapping[activeContext]];
 
-    manageItemCategories(contextMapping[activeContext], activeContext, false);
+    manageItemCategories(false);
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
 
-    manageItemCategories(contextMapping[activeContext], activeContext, true);
+    manageItemCategories(true);
   }
 
   // Save the note to storage
@@ -188,7 +199,7 @@ async function saveNote(): Promise<void> {
   }, 1000);
 }
 
-function manageItemCategories(item: string, activeContext: string, shouldAdd: boolean): void {
+function manageItemCategories(shouldAdd: boolean): void {
   // Remove the category from the item if the note is empty
   if (!shouldAdd) {
     Office.context.mailbox.item.categories.removeAsync(["Mail Notes"], function (asyncResult) {
