@@ -81,4 +81,6 @@ async function loadNoteForContext(context: string, quill?: Quill, itemId?: strin
 
   let noteContents = allNotes[itemId]?.noteContents ?? null;
   quill.setContents(noteContents);
+  // Focus the editor and insert the cursor at the end
+  quill.setSelection(quill.getLength(), 0);
 }
