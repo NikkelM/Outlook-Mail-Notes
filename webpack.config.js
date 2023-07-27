@@ -68,6 +68,11 @@ module.exports = async (env, options) => {
         template: "./src/index.html",
         chunks: [],
       }),
+      new HtmlWebpackPlugin({
+        filename: "404.html",
+        template: "./src/404.html",
+        chunks: [],
+      }),
       new CopyWebpackPlugin({
         patterns: [
           {
