@@ -168,10 +168,14 @@ async function saveNote(): Promise<void> {
 
   if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
     delete allNotes[contextMapping[activeContext]];
+
+    manageItemCategories(contextMapping[activeContext], activeContext, false);
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
+
+    manageItemCategories(contextMapping[activeContext], activeContext, true);
   }
 
   // Save the note to storage
@@ -182,4 +186,21 @@ async function saveNote(): Promise<void> {
   setTimeout(() => {
     icon.style.visibility = "hidden";
   }, 1000);
+}
+
+function manageItemCategories(item: string, activeContext: string, shouldAdd: boolean): void {
+  // Remove the category from the item if the note is empty
+  if (!shouldAdd) {
+    Office.context.mailbox.item.categories.removeAsync(["Mail Notes"], function (asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.log("Removing category failed with error: " + asyncResult.error.message);
+      }
+    });
+  } else {
+    Office.context.mailbox.item.categories.addAsync(["Mail Notes"], function (asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.log("Setting category failed with error: " + asyncResult.error.message);
+      }
+    });
+  }
 }

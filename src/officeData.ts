@@ -22,3 +22,20 @@ export function getSettings() {
   // All notes are saved in the 'settings' object
   return Office.context.roamingSettings;
 }
+
+export function setupCategoryMasterList() {
+  // First check if the "Mail Notes" category already exists, and if not, add it
+  Office.context.mailbox.masterCategories.getAsync(function (asyncResult) {
+    const masterCategories = asyncResult.value;
+    if (!masterCategories.find((category) => category.displayName === "Mail Notes")) {
+      const masterCategoriesToAdd = [
+        {
+          displayName: "Mail Notes",
+          color: "Preset7",
+        },
+      ];
+
+      Office.context.mailbox.masterCategories.addAsync(masterCategoriesToAdd);
+    }
+  });
+}
