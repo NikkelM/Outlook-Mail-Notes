@@ -1,6 +1,6 @@
 // Contains logic that handles the version update process
 
-import { setupCategoryMasterList } from "./officeData.js";
+import { setupCategoryMasterList } from "./officeData";
 import { ADDIN_VERSION } from "./version";
 
 export async function updateVersion(settings: Office.RoamingSettings) {
