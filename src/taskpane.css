@@ -4,7 +4,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: "Leelawadee UI Web", sans-serif;
+  font-family: "Leelawadee UI Web", sans-serif !important;
 }
 
 header {
@@ -109,7 +109,11 @@ main {
   border: 1px solid rgb(16, 110, 190);
 }
 
-/* Buttons in general */
+/* Buttons */
+button {
+  font-family: "Leelawadee UI Web", sans-serif !important;
+}
+
 #noteInput button {
   color: rgb(0, 120, 212);
   background-color: transparent;
@@ -131,6 +135,7 @@ main {
 
 .ql-container.ql-snow {
   border: 1px solid #ccc !important;
+  font-family: "Leelawadee UI Web", sans-serif !important;
 }
 
 .ql-toolbar.ql-snow {
