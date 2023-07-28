@@ -1,3 +1,5 @@
+// Contains all logic concerning the settings menu
+
 import { ADDIN_VERSION } from "./version";
 import { focusEditor } from "./editor";
 
