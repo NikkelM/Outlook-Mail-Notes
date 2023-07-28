@@ -8,7 +8,9 @@ export let quill: Quill;
 let mailId: string, senderId: string, conversationId: string, itemSubject: string, itemNormalizedSubject: string;
 let settings: Office.RoamingSettings;
 // Used to determine whether or not to show the autosave icon
-let previousContext: string;
+let lastKnownContext: string;
+// Used to determine whether or not to autosave the note using the safety save interval
+let safetySaveContext: string;
 
 // Set up the Quill editor even before the Office.onReady event fires, so that the editor is ready to use as soon as possible
 setupQuill();
@@ -23,7 +25,8 @@ export async function setupEditor(): Promise<void> {
   await displayInitialNote();
 
   // Start the autosave timer
-  previousContext = getActiveContext();
+  lastKnownContext = getActiveContext();
+  safetySaveContext = lastKnownContext;
   autosaveNote();
 }
 
@@ -69,7 +72,7 @@ async function displayInitialNote(): Promise<void> {
     mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
   }
 
-  let anyNoteExisted = true;
+  let mailShouldHaveCategory = true;
   if (mailNote) {
     await switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
@@ -77,15 +80,15 @@ async function displayInitialNote(): Promise<void> {
   } else if (senderNote) {
     // We don't want to clutter the interface with sender notes
     // TODO: Make this configurable!
-    anyNoteExisted = false;
+    mailShouldHaveCategory = false;
     await switchToContext("sender", quill, senderId, settings);
   } else {
-    anyNoteExisted = false;
+    mailShouldHaveCategory = false;
     // The default context is the mail context
     await switchToContext("mail", quill, mailId, settings);
   }
 
-  if (anyNoteExisted) {
+  if (mailShouldHaveCategory) {
     manageItemCategories(true);
   } else {
     manageItemCategories(false);
@@ -124,17 +127,19 @@ async function pre1_2_0Update(
 }
 
 // ----- Note saving -----
-let autosaveTimeout;
+let autosaveTimeout, hideTickTimeout;
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
   quill.on("text-change", function (delta) {
     // If the context was changed, we do not want to display the saving icon
-    if (getActiveContext() !== previousContext) {
-      previousContext = getActiveContext();
+    if (getActiveContext() !== lastKnownContext) {
+      lastKnownContext = getActiveContext();
+      clearTimeout(autosaveTimeout);
       savingIcon.style.visibility = "hidden";
       return;
     }
+    clearTimeout(hideTickTimeout);
 
     toggleIconSpinner(true);
     savingIcon.style.visibility = "visible";
@@ -151,12 +156,19 @@ function autosaveNote() {
   });
 
   // Changes are always saved after a set timeout, even if the user is still typing, but only if there are changes to save
+  // This is the "safety save"
   setInterval(function () {
-    if (accumulatedChanges.length() > 0) {
-      saveNote();
+    // We can only save the note if the context has not been changed, as we otherwise have the incorrect delta for the context
+    if (getActiveContext() === safetySaveContext) {
+      if (accumulatedChanges.length() > 0) {
+        saveNote();
+        accumulatedChanges = new Delta();
+        // Don't change the icon appearance here, as it would get switched back to the spinner by the next text-change event immediately
+      }
+    } else {
       accumulatedChanges = new Delta();
-      // Don't change the icon appearance, as it would get switched back to the spinner by the next text-change event immediately
     }
+    safetySaveContext = getActiveContext();
   }, 5000);
 }
 
@@ -169,8 +181,7 @@ function toggleIconSpinner(toSpinner: boolean): void {
 }
 
 async function saveNote(): Promise<void> {
-  const icon = document.getElementById("savingNotice");
-  icon.style.visibility = "visible";
+  savingIcon.style.visibility = "visible";
 
   const newNoteContents = quill.getContents();
   const activeContext = getActiveContext();
@@ -197,7 +208,9 @@ async function saveNote(): Promise<void> {
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
 
-    manageItemCategories(true);
+    if (activeContext === "mail" || activeContext === "conversation") {
+      manageItemCategories(true);
+    }
   }
 
   // Save the note to storage
@@ -205,9 +218,9 @@ async function saveNote(): Promise<void> {
   settings.saveAsync();
 
   // Hide the icon after a timeout
-  setTimeout(() => {
-    icon.style.visibility = "hidden";
-  }, 1000);
+  hideTickTimeout = setTimeout(() => {
+    savingIcon.style.visibility = "hidden";
+  }, 1500);
 }
 
 function manageItemCategories(shouldAdd: boolean): void {
