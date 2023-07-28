@@ -240,3 +240,8 @@ function manageItemCategories(shouldAdd: boolean): void {
     });
   }
 }
+
+export function focusEditor(): void {
+  // Focus the editor and insert the cursor at the end
+  quill.setSelection(quill.getLength(), 0);
+}

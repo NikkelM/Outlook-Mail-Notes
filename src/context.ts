@@ -2,6 +2,7 @@
 /* global document, Office */
 
 import Quill from "quill";
+import { focusEditor } from "./editor";
 import { getIdentifiers, getSettings } from "./officeData";
 
 const contextButtons = {
@@ -81,6 +82,6 @@ async function loadNoteForContext(context: string, quill?: Quill, itemId?: strin
 
   let noteContents = allNotes[itemId]?.noteContents ?? null;
   quill.setContents(noteContents);
-  // Focus the editor and insert the cursor at the end
-  quill.setSelection(quill.getLength(), 0);
+
+  focusEditor();
 }

@@ -4,7 +4,7 @@
 import { getSettings } from "./officeData";
 import { updateVersion } from "./versionUpdate";
 import { setupEditor } from "./editor";
-import { ADDIN_VERSION } from "./version";
+import { setupSettings } from "./settings";
 
 let settings: Office.RoamingSettings;
 
@@ -16,31 +16,7 @@ Office.onReady(async (info) => {
 
     await setupEditor();
 
-    const settingsButton = document.getElementById("settingsButton");
-    const settingContentDiv = document.getElementById("settingContentDiv");
-    const versionNumber = document.getElementById("versionNumber");
-
-    versionNumber.textContent = `v${ADDIN_VERSION}`;
-
-    settingsButton.addEventListener("click", () => {
-
-      if (!settingContentDiv.classList.contains("show")) {
-        settingContentDiv.style.pointerEvents = "all";
-        settingContentDiv.classList.toggle("show");
-        versionNumber.classList.toggle("show");
-        settingContentDiv.style.animation = "fadeIn 0.5s forwards";
-        versionNumber.style.animation = "fadeIn 0.5s forwards";
-      } else {
-        // TODO: Focus editor
-        settingContentDiv.style.animation = "fadeOut 0.5s forwards";
-        settingContentDiv.style.pointerEvents = "none";
-        versionNumber.style.animation = "fadeOut 0.5s forwards";
-        setTimeout(() => {
-          settingContentDiv.classList.toggle("show");
-          versionNumber.classList.toggle("show");
-        }, 500);
-      }
-    });
+    await setupSettings();
 
     fadeOutOverlay();
   } else {
