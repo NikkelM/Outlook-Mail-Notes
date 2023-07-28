@@ -24,6 +24,7 @@ export function getSettings() {
 }
 
 export function setupCategoryMasterList() {
+  console.log("Setting up category master list...");
   // First check if the "Mail Notes" category already exists, and if not, add it
   Office.context.mailbox.masterCategories.getAsync(function (asyncResult) {
     const masterCategories = asyncResult.value;
