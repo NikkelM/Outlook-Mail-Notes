@@ -127,7 +127,7 @@ async function pre1_2_0Update(
 }
 
 // ----- Note saving -----
-let autosaveTimeout, hideTickTimeout;
+let autosaveTimeout;
 function autosaveNote() {
   let accumulatedChanges = new Delta();
 
@@ -139,7 +139,6 @@ function autosaveNote() {
       savingIcon.style.visibility = "hidden";
       return;
     }
-    clearTimeout(hideTickTimeout);
 
     toggleIconSpinner(true);
     savingIcon.style.visibility = "visible";
@@ -218,8 +217,10 @@ async function saveNote(): Promise<void> {
   settings.saveAsync();
 
   // Hide the icon after a timeout
-  hideTickTimeout = setTimeout(() => {
-    savingIcon.style.visibility = "hidden";
+  setTimeout(() => {
+    if (savingIcon.classList.contains("tick")) {
+      savingIcon.style.visibility = "hidden";
+    }
   }, 1500);
 }
 
