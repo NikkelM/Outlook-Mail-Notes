@@ -1,7 +1,7 @@
 // Contains the logic for the main Add-In taskpane
 /* global document, Office */
 
-import { getSettings, setupCategoryMasterList } from "./officeData";
+import { getSettings } from "./officeData";
 import { updateVersion } from "./versionUpdate";
 import { setupEditor } from "./editor";
 
@@ -14,9 +14,6 @@ Office.onReady(async (info) => {
     await updateVersion(settings);
 
     await setupEditor();
-
-    // TODO: Only run this on install/update
-    setupCategoryMasterList();
 
     fadeOutOverlay();
   } else {
