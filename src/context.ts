@@ -12,10 +12,12 @@ const contextButtons = {
 };
 let activeContext;
 
-for (const [key, button] of Object.entries(contextButtons)) {
-  button.addEventListener("click", () => {
-    switchToContext(key);
-  });
+export function setupContextButtons(): void {
+  for (const [key, button] of Object.entries(contextButtons)) {
+    button.addEventListener("click", () => {
+      switchToContext(key);
+    });
+  }
 }
 
 export function getActiveContext(): string {

@@ -5,6 +5,7 @@ import { getSettings } from "./officeData";
 import { updateVersion } from "./versionUpdate";
 import { setupEditor } from "./editor";
 import { setupSettings } from "./settings";
+import { setupContextButtons } from "./context";
 
 let settings: Office.RoamingSettings;
 
@@ -15,6 +16,8 @@ Office.onReady(async (info) => {
     await updateVersion(settings);
 
     await setupEditor();
+
+    setupContextButtons();
 
     await setupSettings();
 
