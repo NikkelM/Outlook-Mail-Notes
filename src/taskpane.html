@@ -58,7 +58,19 @@
         </button>
       <div id="settingContentDiv" class="settings-content align-center">
         <h3>Settings</h3>
-        <p>Customize the Add-In to fit your needs</p>
+        <div class="settingDiv">
+          <label>Control how categories are used to label messages with attached notes:</label>
+          <select id="messageCategoriesDropdown" class="dropdown">
+            <option value="mailNotes">Use a "Mail Notes" category for...</option>
+            <option value="unique">Use a unique category for...</option>
+            <option value="noCategories">Don't set categories</option>
+          </select>
+          <select id="categoryContextDropdown" class="dropdown">
+            <option value="all">...all contexts</option>
+            <option value="messagesConversations">...messages and conversations</option>
+            <option value="messages">...messages only</option>
+          </select>
+        </div>
       </div>
     </div>
   </main>

@@ -72,12 +72,13 @@ main {
   cursor: pointer;
   border-radius: 2px;
   height: 32px;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
   color: rgb(50, 49, 48);
   font-size: 14px;
   font-weight: 400;
   box-sizing: border-box;
   border: 1px solid rgb(138, 136, 134);
+  font-family: "Leelawadee UI Web", sans-serif !important;
 }
 
 /* Do not add margins to the sides of the container */
@@ -107,11 +108,6 @@ main {
 #contextButtons button.active:focus {
   background-color: rgb(16, 110, 190);
   border: 1px solid rgb(16, 110, 190);
-}
-
-/* Buttons */
-button {
-  font-family: "Leelawadee UI Web", sans-serif !important;
 }
 
 #noteInput button {
@@ -234,8 +230,6 @@ button {
   font-size: 14px;
 }
 
-/* Play the animation backwards if the show class is removed */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -252,4 +246,29 @@ button {
   to {
     opacity: 0;
   }
+}
+
+/* Dropdown */
+select.dropdown {
+  font-family: "Leelawadee UI Web", sans-serif !important;
+  padding: 5px;
+  width: 80%;
+  margin: 10px 0 0 0;
+  cursor: pointer;
+  border-radius: 2px;
+  height: 32px;
+  background-color: #fff;
+  color: rgb(50, 49, 48);
+  font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid #333;
+}
+
+select.dropdown:hover {
+  background-color: rgb(243, 242, 241);
+}
+
+select.dropdown:focus:hover {
+  background-color: #fff !important;
 }
