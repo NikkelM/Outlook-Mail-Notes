@@ -36,6 +36,10 @@ main {
   text-align: center;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .overlay {
   position: fixed;
   top: 0;
