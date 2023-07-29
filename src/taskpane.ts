@@ -4,7 +4,7 @@
 import { getSettings } from "./officeData";
 import { updateVersion } from "./versionUpdate";
 import { setupEditor } from "./editor";
-import { setupSettings } from "./settings";
+import { setupApplicationSettings } from "./settings";
 import { setupContextButtons } from "./context";
 
 let settings: Office.RoamingSettings;
@@ -15,11 +15,11 @@ Office.onReady(async (info) => {
     settings = getSettings();
     await updateVersion(settings);
 
+    setupApplicationSettings();
+
     await setupEditor();
 
     setupContextButtons();
-
-    await setupSettings();
 
     fadeOutOverlay();
   } else {

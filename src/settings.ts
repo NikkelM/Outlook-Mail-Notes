@@ -4,8 +4,7 @@ import { ADDIN_VERSION } from "./version";
 import { focusEditor } from "./editor";
 import { getSettings } from "./officeData";
 
-// TODO: Async?
-export async function setupSettings() {
+export function setupApplicationSettings() {
   const settings = getSettings();
 
   setupSettingsButtonAndVersionNumber();
@@ -75,7 +74,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     settings.saveAsync();
   }
 
-  // If the user changes the message categories dropdown, update the category context dropdown
+  // If the user changes the message categories dropdown
   messageCategoriesDropdown.addEventListener("change", () => {
     const selectedCategory = messageCategoriesDropdown.value;
 
@@ -91,6 +90,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     settings.saveAsync();
   });
 
+  // If the user changes the category context dropdown
   categoryContextDropdown.addEventListener("change", () => {
     const selectedContext = categoryContextDropdown.value;
 
