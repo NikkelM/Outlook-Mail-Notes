@@ -72,27 +72,18 @@ async function displayInitialNote(): Promise<void> {
     mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
   }
 
-  let mailShouldHaveCategory = true;
   if (mailNote) {
     await switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
     await switchToContext("conversation", quill, conversationId, settings);
   } else if (senderNote) {
-    // We don't want to clutter the interface with sender notes
-    // TODO: Make this configurable!
-    mailShouldHaveCategory = false;
     await switchToContext("sender", quill, senderId, settings);
   } else {
-    mailShouldHaveCategory = false;
     // The default context is the mail context
     await switchToContext("mail", quill, mailId, settings);
   }
 
-  if (mailShouldHaveCategory) {
-    manageItemCategories(true);
-  } else {
-    manageItemCategories(false);
-  }
+  manageNoteCategories(mailNote, conversationNote, senderNote);
 }
 
 async function pre1_2_0Update(
@@ -194,27 +185,16 @@ async function saveNote(): Promise<void> {
 
   if (newNoteContents.length() === 1 && newNoteContents.ops[0].insert === "\n") {
     delete allNotes[contextMapping[activeContext]];
-
-    // If no note exists for any eligible context, delete the category
-    const mailNote = allNotes[mailId];
-    const conversationNote = allNotes[conversationId];
-
-    if (!mailNote && !conversationNote) {
-      manageItemCategories(false);
-    }
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
-
-    if (activeContext === "mail" || activeContext === "conversation") {
-      manageItemCategories(true);
-    }
   }
 
   // Save the note to storage
   settings.set("notes", allNotes);
   settings.saveAsync();
+  manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
 
   // Hide the icon after a timeout
   setTimeout(() => {
@@ -224,16 +204,74 @@ async function saveNote(): Promise<void> {
   }, 1500);
 }
 
-function manageItemCategories(shouldAdd: boolean): void {
-  // Remove the category from the item if the note is empty
-  if (!shouldAdd) {
-    Office.context.mailbox.item.categories.removeAsync(["Mail Notes"], function (asyncResult) {
+export async function manageNoteCategories(mailNote: any, conversationNote: any, senderNote: any): Promise<void> {
+  // What kind of categories should be added
+  const messageCategories = await settings.get("messageCategories");
+  const categoryContexts = await settings.get("categoryContexts");
+
+  let validContexts: string[];
+  switch (categoryContexts) {
+    case "all":
+      validContexts = ["mail", "conversation", "sender"];
+      break;
+    case "messagesConversations":
+      validContexts = ["mail", "conversation"];
+      break;
+    case "messages":
+      validContexts = ["mail"];
+      break;
+    default:
+      throw new Error("Invalid categoryContexts setting");
+  }
+
+  const allCategories = await settings.get("addinCategories");
+  // Get the displayName properties of allCategories
+  const allCategoryNames = Object.values(allCategories).map((category: any) => category.displayName);
+
+  let addCategories: string[] = [];
+  switch (messageCategories) {
+    case "mailNotes":
+      if (
+        (mailNote && validContexts.includes("mail")) ||
+        (conversationNote && validContexts.includes("conversation")) ||
+        (senderNote && validContexts.includes("sender"))
+      ) {
+        addCategories.push(allCategories["generalCategory"].displayName);
+      }
+      break;
+    case "unique":
+      if (mailNote && validContexts.includes("mail")) {
+        addCategories.push(allCategories["messageCategory"].displayName);
+      }
+      if (conversationNote && validContexts.includes("conversation")) {
+        addCategories.push(allCategories["conversationCategory"].displayName);
+      }
+      if (senderNote && validContexts.includes("sender")) {
+        addCategories.push(allCategories["senderCategory"].displayName);
+      }
+      break;
+    case "noCategories":
+      break;
+    default:
+      throw new Error("Invalid messageCategories setting");
+  }
+  const removeCategories = allCategoryNames.filter((category) => !addCategories.includes(category));
+
+  setItemCategories(addCategories, removeCategories);
+}
+
+// Set exactly the categories passed as parameter, and remove all
+function setItemCategories(addCategories: string[], removeCategories: string[]): void {
+  if (removeCategories.length > 0) {
+    Office.context.mailbox.item.categories.removeAsync(removeCategories, function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
         console.log("Removing category failed with error: " + asyncResult.error.message);
       }
     });
-  } else {
-    Office.context.mailbox.item.categories.addAsync(["Mail Notes"], function (asyncResult) {
+  }
+
+  if (addCategories.length > 0) {
+    Office.context.mailbox.item.categories.addAsync(addCategories, function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
         console.log("Setting category failed with error: " + asyncResult.error.message);
       }

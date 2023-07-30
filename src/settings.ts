@@ -1,14 +1,14 @@
 // Contains all logic concerning the settings menu
 
 import { ADDIN_VERSION } from "./version";
-import { focusEditor } from "./editor";
-import { getSettings } from "./officeData";
+import { focusEditor, manageNoteCategories } from "./editor";
+import { getSettings, getIdentifiers } from "./officeData";
 
-export function setupApplicationSettings() {
+export async function setupApplicationSettings() {
   const settings = getSettings();
 
   setupSettingsButtonAndVersionNumber();
-  setupCategoryDropdowns(settings);
+  await setupCategoryDropdowns(settings);
 }
 
 function setupSettingsButtonAndVersionNumber() {
@@ -42,13 +42,13 @@ function setupSettingsButtonAndVersionNumber() {
   });
 }
 
-function setupCategoryDropdowns(settings: Office.RoamingSettings) {
+async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   const categoryDropdownsDiv: HTMLDivElement = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
   const messageCategoriesDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
     "messageCategoriesDropdown"
   ) as HTMLSelectElement;
-  const categoryContextDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
-    "categoryContextDropdown"
+  const categoryContextsDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
+    "categoryContextsDropdown"
   ) as HTMLSelectElement;
 
   // Set the message categories dropdown to the saved setting
@@ -56,7 +56,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   if (savedMessageCategories) {
     messageCategoriesDropdown.value = savedMessageCategories;
     if (savedMessageCategories === "noCategories") {
-      categoryContextDropdown.classList.add("hidden");
+      categoryContextsDropdown.classList.add("hidden");
     }
   } else {
     messageCategoriesDropdown.value = "mailNotes";
@@ -65,37 +65,46 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   }
 
   // Set the category context dropdown to the saved setting
-  const savedCategoryContext = settings.get("categoryContext");
-  if (savedCategoryContext) {
-    categoryContextDropdown.value = savedCategoryContext;
+  const savedCategoryContexts = settings.get("categoryContexts");
+  if (savedCategoryContexts) {
+    categoryContextsDropdown.value = savedCategoryContexts;
   } else {
-    categoryContextDropdown.value = "all";
-    settings.set("categoryContext", "all");
+    categoryContextsDropdown.value = "all";
+    settings.set("categoryContexts", "all");
     settings.saveAsync();
   }
 
+  const allNotes = await settings.get("notes");
+  const { mailId, senderId, conversationId, itemSubject, itemNormalizedSubject } = getIdentifiers();
+
   // If the user changes the message categories dropdown
-  messageCategoriesDropdown.addEventListener("change", () => {
+  messageCategoriesDropdown.addEventListener("change", function () {
     const selectedCategory = messageCategoriesDropdown.value;
 
     // Hide the category context dropdown if the user selects "No Categories"
     if (selectedCategory === "noCategories") {
-      categoryContextDropdown.classList.add("hidden");
+      categoryContextsDropdown.classList.add("hidden");
     } else {
-      categoryContextDropdown.classList.remove("hidden");
+      categoryContextsDropdown.classList.remove("hidden");
     }
 
     // Save the selected setting to the Office Roaming Settings
     settings.set("messageCategories", selectedCategory);
     settings.saveAsync();
+
+    // Update the categories live
+    manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
   });
 
   // If the user changes the category context dropdown
-  categoryContextDropdown.addEventListener("change", () => {
-    const selectedContext = categoryContextDropdown.value;
+  categoryContextsDropdown.addEventListener("change", function () {
+    const selectedContext = categoryContextsDropdown.value;
 
     // Save the selected setting to the Office Roaming Settings
-    settings.set("categoryContext", selectedContext);
+    settings.set("categoryContexts", selectedContext);
     settings.saveAsync();
+
+    // Update the categories live
+    manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
   });
 }

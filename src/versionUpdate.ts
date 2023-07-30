@@ -1,6 +1,5 @@
 // Contains logic that handles the version update process
 
-import { setupCategoryMasterList } from "./officeData";
 import { ADDIN_VERSION } from "./version";
 
 export async function updateVersion(settings: Office.RoamingSettings) {
@@ -9,9 +8,6 @@ export async function updateVersion(settings: Office.RoamingSettings) {
 
   if (currentVersion < ADDIN_VERSION) {
     console.log("Updating Add-In from version " + currentVersion + " to version " + ADDIN_VERSION);
-
-    // Happens on every update
-    updateVersionGeneral();
 
     if (currentVersion < "0.0.2") {
       // Move all note data from the root of the settings object to the "notes" property
@@ -53,9 +49,4 @@ export async function updateVersion(settings: Office.RoamingSettings) {
     // Update the settings object
     settings.saveAsync();
   }
-}
-
-function updateVersionGeneral() {
-  // Make sure the category master list is set up correctly
-  setupCategoryMasterList();
 }

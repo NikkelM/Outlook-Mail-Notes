@@ -23,20 +23,49 @@ export function getSettings() {
   return Office.context.roamingSettings;
 }
 
-export function setupCategoryMasterList() {
+export async function setupCategoryMasterList() {
   console.log("Setting up category master list...");
-  // First check if the "Mail Notes" category already exists, and if not, add it
+  const defaultAddInCategories = {
+    generalCategory: {
+      displayName: "Mail Notes",
+      color: "Preset7",
+    },
+    messageCategory: {
+      displayName: "Message - Mail Notes",
+      color: "Preset7",
+    },
+    conversationCategory: {
+      displayName: "Conversation - Mail Notes",
+      color: "Preset7",
+    },
+    senderCategory: {
+      displayName: "Sender - Mail Notes",
+      color: "Preset7",
+    },
+  };
+
+  // Get the categories saved in settings
+  const settings = getSettings();
+  let userAddInCategories = await settings.get("addinCategories");
+  // If there are no categories saved in settings, use the default categories
+  if (!userAddInCategories) {
+    settings.set("addinCategories", defaultAddInCategories);
+    settings.saveAsync();
+    userAddInCategories = defaultAddInCategories;
+  }
+
+  // For each category, make sure it exists in the master list
+  const addinCategories = Object.values(userAddInCategories);
   Office.context.mailbox.masterCategories.getAsync(function (asyncResult) {
     const masterCategories = asyncResult.value;
-    if (!masterCategories.find((category) => category.displayName === "Mail Notes")) {
-      const masterCategoriesToAdd = [
-        {
-          displayName: "Mail Notes",
-          color: "Preset7",
-        },
-      ];
+    // Add all categories that don't exist yet
+    let categoriesToAdd = [];
+    addinCategories.forEach((category: any) => {
+      if (!masterCategories.find((masterCategory) => masterCategory.displayName === category.displayName)) {
+        categoriesToAdd.push(category);
+      }
+    });
 
-      Office.context.mailbox.masterCategories.addAsync(masterCategoriesToAdd);
-    }
+    Office.context.mailbox.masterCategories.addAsync(categoriesToAdd);
   });
 }
