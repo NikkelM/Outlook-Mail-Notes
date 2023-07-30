@@ -26,6 +26,7 @@ module.exports = async (env, options) => {
     resolve: {
       extensions: [".ts", ".tsx", ".html", ".js"],
     },
+    target: ['web', 'es5'],
     module: {
       rules: [
         {
@@ -41,7 +42,7 @@ module.exports = async (env, options) => {
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          use: "ts-loader",
+          use: "babel-loader",
         },
         {
           test: /\.html$/,
