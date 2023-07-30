@@ -32,15 +32,15 @@ export async function setupCategoryMasterList() {
     },
     messageCategory: {
       displayName: "Message - Mail Notes",
-      color: "Preset7",
+      color: "Preset6",
     },
     conversationCategory: {
       displayName: "Conversation - Mail Notes",
-      color: "Preset7",
+      color: "Preset5",
     },
     senderCategory: {
       displayName: "Sender - Mail Notes",
-      color: "Preset7",
+      color: "Preset8",
     },
   };
 
