@@ -1,6 +1,7 @@
 // Contains all logic concerning the settings menu
 
 import { ADDIN_VERSION } from "./version";
+import { CATEGORY_COLORS } from "./constants";
 import { focusEditor, manageNoteCategories } from "./editor";
 import { getSettings, getIdentifiers } from "./officeData";
 
@@ -112,39 +113,15 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
 }
 
 function setupCategoryColorPicker() {
-  console.log(Office.MailboxEnums.CategoryColor);
+  const settings = getSettings();
   // Get the category input elements
   const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
-
-  const colors = [
-    { name: "Red", value: "#b10e1c" },
-    { name: "Orange", value: "#c33400" },
-    { name: "Peach", value: "#e69a3e" },
-    { name: "Yellow", value: "#e3cc00" },
-    { name: "Light Green", value: "#009c4e" },
-    { name: "Light Teal", value: "#00a3ae" },
-    { name: "Lime Green", value: "#a8cc4d" },
-    { name: "Blue", value: "#006cbe" },
-    { name: "Lavender", value: "#756cc8" },
-    { name: "Magenta", value: "#cc007e" },
-    { name: "Light Gray", value: "#919da1" },
-    { name: "Steel", value: "#005265" },
-    { name: "Warm Gray", value: "#8c8e83" },
-    { name: "Gray", value: "#5d6c70" },
-    { name: "Dark Gray", value: "#3e3e3e" },
-    { name: "Dark Red", value: "#6a0a1a" },
-    { name: "Dark Orange", value: "#b5490f" },
-    { name: "Brown", value: "#814e29" },
-    { name: "Gold", value: "#ae8e00" },
-    { name: "Dark Green", value: "#0a600a" },
-    { name: "Teal", value: "#02767a" },
-    { name: "Green", value: "#427505" },
-    { name: "Navy Blue", value: "#00345c" },
-    { name: "Dark Purple", value: "#684697" },
-    { name: "Dark Pink", value: "#8c0059" },
-  ];
+  const addinCategories = settings.get("addinCategories");
 
   categoryInputs.forEach((categoryInput) => {
+    // The key in the settings object is the same as the id of the input minus the 'NameInput' suffix
+    const inputId = categoryInput.id.slice(0, -9);
+
     // Create a color picker container
     const colorPicker = document.createElement("div");
     colorPicker.classList.add("color-picker");
@@ -154,6 +131,9 @@ function setupCategoryColorPicker() {
     colorPickerButton.classList.add("color-picker-button");
     colorPickerButton.title = "Select a color";
     colorPicker.appendChild(colorPickerButton);
+    colorPickerButton.style.backgroundColor = CATEGORY_COLORS.find(
+      (c) => c.preset === addinCategories[inputId].color
+    ).value;
 
     // Create a dropdown
     const colorPickerDropdown = document.createElement("div");
@@ -165,7 +145,7 @@ function setupCategoryColorPicker() {
     colorPickerGrid.classList.add("color-picker-grid");
 
     // Loop through the colors and create a color picker cell element for each color
-    colors.forEach((color) => {
+    CATEGORY_COLORS.forEach((color) => {
       const colorPickerCell = document.createElement("div");
       colorPickerCell.classList.add("color-picker-cell");
       colorPickerCell.style.backgroundColor = color.value;
@@ -173,9 +153,13 @@ function setupCategoryColorPicker() {
       colorPickerCell.addEventListener("click", () => {
         // Update the background color of the button
         colorPickerButton.style.backgroundColor = color.value;
-        // TODO: Save the new color to settings
         // Hide the dropdown
         colorPickerDropdown.style.display = "none";
+
+        // Save the new color to the settings
+        addinCategories[inputId].color = color.preset;
+        settings.set("addinCategories", addinCategories);
+        settings.saveAsync();
       });
       colorPickerGrid.appendChild(colorPickerCell);
     });

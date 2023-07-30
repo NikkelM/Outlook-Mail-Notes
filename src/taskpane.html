@@ -77,11 +77,12 @@
             <!-- Input fields for each context, to choose the name and color of the category -->
             <div id="categoryNamesInputsDiv">
               <label>Customize your categories:</label>
-              <input id="mailNotesCategoryNameInput" class="category-input" placeholder="Mail Notes" 
+              <!-- The ID of the input must be the key of the category saved in settings + 'NameInput' -->
+              <input id="generalCategoryNameInput" class="category-input" placeholder="Mail Notes" 
                 value="Mail Notes" title="Set the name of the category to use for all notes and contexts."/>
               <input id="messageCategoryNameInput" class="category-input" placeholder="Mail Notes - Mail Notes" 
                 value="Message - Mail Notes" title="Set the category name to use for mails with message notes." />
-              <input id="convrsationCategoryNameInput" class="category-input" placeholder="Conversation - Mail Notes" 
+              <input id="conversationCategoryNameInput" class="category-input" placeholder="Conversation - Mail Notes" 
                 value="Conversation - Mail Notes" title="Set the category name to use for mails with attached conversation notes." />
               <input id="senderCategoryNameInput" class="category-input" placeholder="Sender - Mail Notes" 
                 value="Sender - Mail Notes" title="Set the category name to use for mails with attached sender notes." />
