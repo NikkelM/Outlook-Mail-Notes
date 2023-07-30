@@ -223,11 +223,12 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
   background-color: #fff;
   z-index: 2;
   opacity: 1;
+  padding: 10px;
 }
 
 .settings-div .settings-content p {
@@ -256,7 +257,7 @@ main {
 select.dropdown {
   font-family: "Leelawadee UI Web", sans-serif !important;
   padding: 5px;
-  width: 80%;
+  width: 90%;
   margin: 10px 0 0 0;
   cursor: pointer;
   border-radius: 2px;
