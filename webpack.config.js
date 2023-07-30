@@ -35,7 +35,18 @@ module.exports = async (env, options) => {
           use: {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-typescript"],
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    targets: {
+                      ie: "11",
+                    },
+                    useBuiltIns: "usage",
+                    corejs: "3",
+                  },
+                ],
+              ],
             },
           },
         },
