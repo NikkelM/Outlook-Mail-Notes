@@ -26,6 +26,7 @@ module.exports = async (env, options) => {
     resolve: {
       extensions: [".ts", ".tsx", ".html", ".js"],
     },
+    target: ['web', 'es5'],
     module: {
       rules: [
         {
@@ -34,14 +35,25 @@ module.exports = async (env, options) => {
           use: {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-typescript"],
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    targets: {
+                      ie: "11",
+                    },
+                    useBuiltIns: "usage",
+                    corejs: "3",
+                  },
+                ],
+              ],
             },
           },
         },
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          use: "ts-loader",
+          use: "babel-loader",
         },
         {
           test: /\.html$/,
