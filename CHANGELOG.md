@@ -3,7 +3,11 @@
 ## v1.2.0
 
 <!--Releasenotes start-->
-- The Add-In will now automatically set customizable categories if a note is added to a message.
+- The Add-In will now automatically set categories if a note is added to a message.
+- Added a settings menu allowing you to change the names and colors of categories, as well as to what kind of contexts a category is added.
+- The editor is now focused when opening the Add-In or changing contexts.
+- Fixed a bug where a note would be lost if a message is moved to a different folder.
+- Fixed some display bugs regarding the saving icon.
 <!--Releasenotes end-->
 
 ## v1.1.3
