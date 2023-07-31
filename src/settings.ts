@@ -11,8 +11,7 @@ export async function setupApplicationSettings() {
   setupSettingsButtonAndVersionNumber();
   await setupCategoryDropdowns(settings);
 
-  setupCategoryNameInputs(settings);
-  setupCategoryColorPicker(settings);
+  setupCategoryCustomization(settings);
 }
 
 function setupSettingsButtonAndVersionNumber() {
@@ -44,6 +43,69 @@ function setupSettingsButtonAndVersionNumber() {
       }, 500);
     }
   });
+}
+
+function setupCategoryCustomization(settings: Office.RoamingSettings) {
+  showRelevantCustomization(settings);
+  setupCategoryNameInputs(settings);
+  setupCategoryColorPicker(settings);
+}
+
+async function showRelevantCustomization(settings: Office.RoamingSettings) {
+  const categoryNamesInputsDiv: HTMLDivElement = document.getElementById("categoryNamesInputsDiv") as HTMLDivElement;
+  const generalCategoryCustomization: HTMLDivElement = document.getElementById(
+    "generalCategoryCustomization"
+  ) as HTMLDivElement;
+  const messageCategoryCustomization: HTMLDivElement = document.getElementById(
+    "messageCategoryCustomization"
+  ) as HTMLDivElement;
+  const conversationCategoryCustomization: HTMLDivElement = document.getElementById(
+    "conversationCategoryCustomization"
+  ) as HTMLDivElement;
+  const senderCategoryCustomization: HTMLDivElement = document.getElementById(
+    "senderCategoryCustomization"
+  ) as HTMLDivElement;
+
+  const messageCategories = await settings.get("messageCategories");
+  const categoryContexts = await settings.get("categoryContexts");
+
+  switch (messageCategories) {
+    case "mailNotes":
+      generalCategoryCustomization.classList.remove("removed");
+      messageCategoryCustomization.classList.add("removed");
+      conversationCategoryCustomization.classList.add("removed");
+      senderCategoryCustomization.classList.add("removed");
+      categoryNamesInputsDiv.classList.remove("removed");
+      break;
+    case "unique":
+      generalCategoryCustomization.classList.add("removed");
+      categoryNamesInputsDiv.classList.remove("removed");
+      if (categoryContexts === "all") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.remove("removed");
+        senderCategoryCustomization.classList.remove("removed");
+      } else if (categoryContexts === "messagesConversations") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.remove("removed");
+        senderCategoryCustomization.classList.add("removed");
+      } else if (categoryContexts === "messages") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.add("removed");
+        senderCategoryCustomization.classList.add("removed");
+      } else {
+        throw new Error("Invalid category context");
+      }
+      break;
+    case "noCategories":
+      generalCategoryCustomization.classList.add("removed");
+      messageCategoryCustomization.classList.add("removed");
+      conversationCategoryCustomization.classList.add("removed");
+      senderCategoryCustomization.classList.add("removed");
+      categoryNamesInputsDiv.classList.add("removed");
+      break;
+    default:
+      throw new Error("Invalid message categories");
+  }
 }
 
 async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
@@ -96,6 +158,8 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     settings.set("messageCategories", selectedCategory);
     settings.saveAsync();
 
+    showRelevantCustomization(settings);
+
     // Update the categories live
     manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
   });
@@ -107,6 +171,8 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     // Save the selected setting to the Office Roaming Settings
     settings.set("categoryContexts", selectedContext);
     settings.saveAsync();
+
+    showRelevantCustomization(settings);
 
     // Update the categories live
     manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
