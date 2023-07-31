@@ -10,6 +10,9 @@ export async function setupApplicationSettings() {
 
   setupSettingsButtonAndVersionNumber();
   await setupCategoryDropdowns(settings);
+
+  setupCategoryNameInputs(settings);
+  setupCategoryColorPicker(settings);
 }
 
 function setupSettingsButtonAndVersionNumber() {
@@ -52,10 +55,8 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     "categoryContextsDropdown"
   ) as HTMLSelectElement;
 
-  setupCategoryColorPicker();
-
   // Set the message categories dropdown to the saved setting
-  const savedMessageCategories = settings.get("messageCategories");
+  const savedMessageCategories = await settings.get("messageCategories");
   if (savedMessageCategories) {
     messageCategoriesDropdown.value = savedMessageCategories;
     if (savedMessageCategories === "noCategories") {
@@ -68,7 +69,7 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   }
 
   // Set the category context dropdown to the saved setting
-  const savedCategoryContexts = settings.get("categoryContexts");
+  const savedCategoryContexts = await settings.get("categoryContexts");
   if (savedCategoryContexts) {
     categoryContextsDropdown.value = savedCategoryContexts;
   } else {
@@ -78,7 +79,7 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   }
 
   const allNotes = await settings.get("notes");
-  const { mailId, senderId, conversationId, itemSubject, itemNormalizedSubject } = getIdentifiers();
+  const { mailId, senderId, conversationId } = getIdentifiers();
 
   // If the user changes the message categories dropdown
   messageCategoriesDropdown.addEventListener("change", function () {
@@ -112,11 +113,43 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   });
 }
 
-function setupCategoryColorPicker() {
-  const settings = getSettings();
+async function setupCategoryNameInputs(settings: Office.RoamingSettings) {
   // Get the category input elements
   const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
-  const addinCategories = settings.get("addinCategories");
+  const addinCategories = await settings.get("addinCategories");
+
+  categoryInputs.forEach((categoryInput) => {
+    // The key in the settings object is the same as the id of the input minus the 'NameInput' suffix
+    const inputId = categoryInput.id.slice(0, -9);
+
+    // Set the input value to the saved setting
+    categoryInput.value = addinCategories[inputId].displayName;
+
+    // If the user changes the category name input, update the master category list
+    categoryInput.addEventListener("change", async function () {
+      // If the name was not changed, do nothing
+      if (categoryInput.value === addinCategories[inputId].displayName) {
+        return;
+      }
+
+      const newCategory = {
+        displayName: categoryInput.value,
+        color: addinCategories[inputId].color,
+      };
+      await updateMasterCategories(addinCategories[inputId], newCategory);
+
+      // Save the new name to the settings
+      addinCategories[inputId].displayName = categoryInput.value;
+      settings.set("addinCategories", addinCategories);
+      settings.saveAsync();
+    });
+  });
+}
+
+async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
+  // Get the category input elements
+  const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
+  const addinCategories = await settings.get("addinCategories");
 
   categoryInputs.forEach((categoryInput) => {
     // The key in the settings object is the same as the id of the input minus the 'NameInput' suffix
@@ -150,17 +183,26 @@ function setupCategoryColorPicker() {
       colorPickerCell.classList.add("color-picker-cell");
       colorPickerCell.style.backgroundColor = color.value;
       colorPickerCell.title = color.name;
-      colorPickerCell.addEventListener("click", () => {
+
+      colorPickerCell.addEventListener("click", async function () {
         // Update the background color of the button
         colorPickerButton.style.backgroundColor = color.value;
         // Hide the dropdown
         colorPickerDropdown.style.display = "none";
+
+        // Update the master category list
+        const newCategory = {
+          displayName: addinCategories[inputId].displayName,
+          color: color.preset,
+        };
+        await updateMasterCategories(addinCategories[inputId], newCategory);
 
         // Save the new color to the settings
         addinCategories[inputId].color = color.preset;
         settings.set("addinCategories", addinCategories);
         settings.saveAsync();
       });
+
       colorPickerGrid.appendChild(colorPickerCell);
     });
 
@@ -178,6 +220,60 @@ function setupCategoryColorPicker() {
       } else {
         colorPickerDropdown.style.display = "none";
       }
+    });
+  });
+}
+
+async function updateMasterCategories(oldCategory: any, newCategory: any) {
+  // Only remove the master category if the names are different
+  const categoryToRemove = [oldCategory.displayName];
+  const categoryToAdd = [newCategory];
+
+  Office.context.mailbox.item.categories.removeAsync(categoryToRemove, function () {
+    Office.context.mailbox.masterCategories.removeAsync(categoryToRemove, async function () {
+      const options: Office.AsyncContextOptions = {
+        asyncContext: [],
+      };
+      do {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        Office.context.mailbox.masterCategories.getAsync(options, async function (asyncResult) {
+          const newMasterCategories = asyncResult.value;
+          options.asyncContext = newMasterCategories;
+        });
+      } while (
+        options.asyncContext.find(
+          (masterCategory) =>
+            masterCategory.displayName === oldCategory.displayName && masterCategory.color === oldCategory.color
+        )
+      );
+
+      Office.context.mailbox.masterCategories.addAsync(categoryToAdd, async function (asyncResult) {
+        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+          console.log("Adding master category failed with error: " + asyncResult.error.message);
+        }
+
+        const options: Office.AsyncContextOptions = {
+          asyncContext: [],
+        };
+        while (
+          !options.asyncContext.find(
+            (masterCategory) =>
+              masterCategory.displayName === newCategory.displayName && masterCategory.color === newCategory.color
+          )
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 10));
+          Office.context.mailbox.masterCategories.getAsync(options, async function (asyncResult) {
+            const newMasterCategories = asyncResult.value;
+            options.asyncContext = newMasterCategories;
+          });
+        }
+
+        // Add the new category to the current item
+        const { mailId, senderId, conversationId } = getIdentifiers();
+        const settings = getSettings();
+        const allNotes = await settings.get("notes");
+        manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
+      });
     });
   });
 }
