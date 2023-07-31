@@ -1,14 +1,20 @@
 # Changelog
 
-## v1.2.0
+## v1.2.1
 
 <!--Releasenotes start-->
+- Only relevant customization options - depending on other chosen settings - will now be shown.
+- Added descriptions next to the category customization inputs in the settings menu.
+- Clicking anywhere outside of it will now close a colour picker.
+<!--Releasenotes end-->
+
+## v1.2.0
+
 - The Add-In will now automatically set categories if a note is added to a message.
 - Added a settings menu allowing you to change the names and colors of categories, as well as to what kind of contexts a category is added.
 - The editor is now focused when opening the Add-In or changing contexts.
 - Fixed a bug where a note would be lost if a message is moved to a different folder.
 - Fixed some display bugs regarding the saving icon.
-<!--Releasenotes end-->
 
 ## v1.1.3
 
