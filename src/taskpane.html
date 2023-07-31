@@ -62,7 +62,7 @@
         <h3>Settings</h3>
         <div class="settingDiv">
           <div id="categoryDropdownsDiv">
-            <label>Control how categories are used to label messages with attached notes:</label>
+            <label style="display:block;">Control how categories are used to label messages with attached notes:</label>
             <select id="messageCategoriesDropdown" class="dropdown">
               <option value="mailNotes">Use a "Mail Notes" category for...</option>
               <option value="unique">Use a unique category for...</option>
@@ -78,19 +78,23 @@
           <div id="categoryNamesInputsDiv" style="margin-top: 15px;">
             <label>Customize your categories:</label>
             <p><i>When <b>renaming</b> a category, you will need to manually remove categories of this type from other messages, doing so automatically is not supported by Outlook!</i></p>
-            <div id="generalCategoryCustomization" class="removed">
+            <div id="generalCategoryCustomization" class="categoryCustomizationDiv removed">
+              <p>For all notes:</p>
               <input id="generalCategoryNameInput" class="category-input" placeholder="Mail Notes" 
                 value="Mail Notes" title="Set the name of the category to use for all notes and contexts."/>
             </div>
-            <div id="messageCategoryCustomization" class="removed">
+            <div id="messageCategoryCustomization" class="categoryCustomizationDiv removed">
+              <p>Messages</p>
               <input id="messageCategoryNameInput" class="category-input" placeholder="Mail Notes - Mail Notes" 
                 value="Message - Mail Notes" title="Set the category name to use for mails with message notes." />
             </div>
-            <div id="conversationCategoryCustomization" class="removed">
+            <div id="conversationCategoryCustomization" class="categoryCustomizationDiv removed">
+              <p>Conversations</p>
               <input id="conversationCategoryNameInput" class="category-input" placeholder="Conversation - Mail Notes" 
                 value="Conversation - Mail Notes" title="Set the category name to use for mails with attached conversation notes." />
             </div>
-            <div id="senderCategoryCustomization" class="removed">
+            <div id="senderCategoryCustomization" class="categoryCustomizationDiv removed">
+              <p>Senders</p>
               <input id="senderCategoryNameInput" class="category-input" placeholder="Sender - Mail Notes" 
                 value="Sender - Mail Notes" title="Set the category name to use for mails with attached sender notes." />
             </div>

@@ -98,21 +98,6 @@ select.dropdown:focus:hover {
   background-color: #fff !important;
 }
 
-/* Input */
-.category-input {
-  width: 60%;
-  margin: 5px 0 5px 0;
-  padding: 5px;
-  border-radius: 2px;
-  height: 32px;
-  background-color: #fff;
-  color: rgb(50, 49, 48);
-  font-size: 14px;
-  font-weight: 400;
-  box-sizing: border-box;
-  border: 1px solid #333;
-}
-
 /* Color pickers */
 .color-picker {
   position: relative;
@@ -124,8 +109,7 @@ select.dropdown:focus:hover {
   height: 20px;
   border: 1px solid #333;
   margin: 5px 6px 5px 6px;
-  position: relative;
-  transform: translateY(10%);
+  transform: translateY(2px);
   cursor: pointer;
 }
 
@@ -174,4 +158,26 @@ select.dropdown:focus:hover {
 
 .color-picker-dropdown .color-picker-grid {
   pointer-events: auto;
+}
+
+/* Input */
+.categoryCustomizationDiv p {
+  text-align: right;
+  display: inline-block;
+  margin-bottom: 0;
+  width: 95px;
+}
+
+.category-input {
+  width: calc(60% - 20px);
+  margin: 5px 0 5px 0;
+  padding: 5px;
+  border-radius: 2px;
+  height: 32px;
+  background-color: #fff;
+  color: rgb(50, 49, 48);
+  font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid #333;
 }
