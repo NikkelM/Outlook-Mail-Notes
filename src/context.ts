@@ -24,7 +24,7 @@ export function getActiveContext(): string {
   return activeContext;
 }
 
-export function switchToContext(
+export async function switchToContext(
   context: string,
   quill?: Quill,
   itemId?: string,
@@ -34,7 +34,7 @@ export function switchToContext(
     return;
   }
   setActiveContext(context);
-  loadNoteForContext(context, quill, itemId, settings);
+  await loadNoteForContext(context, quill, itemId, settings);
 }
 
 function setActiveContext(context: string) {
@@ -54,7 +54,7 @@ function setActiveContext(context: string) {
   activeContext = context;
 }
 
-function loadNoteForContext(context: string, quill?: Quill, itemId?: string, settings?: Office.RoamingSettings) {
+async function loadNoteForContext(context: string, quill?: Quill, itemId?: string, settings?: Office.RoamingSettings) {
   if (!settings) {
     settings = getSettings();
   }
@@ -80,7 +80,7 @@ function loadNoteForContext(context: string, quill?: Quill, itemId?: string, set
     }
   }
 
-  const allNotes = settings.get("notes");
+  const allNotes = await settings.get("notes");
 
   let noteContents = allNotes[itemId]?.noteContents ?? null;
   quill.setContents(noteContents);

@@ -13,15 +13,15 @@ Office.onReady(async (info) => {
   if (info.host === Office.HostType.Outlook) {
     // Check if the add-in has been updated since the last time it was opened
     settings = getSettings();
-    updateVersion(settings);
+    await updateVersion(settings);
 
     // Make sure the category master list is set up correctly
     // Users can manually delete categories, so we need to re-add them if necessary
-    setupCategoryMasterList();
+    await setupCategoryMasterList();
 
-    setupApplicationSettings();
+    await setupApplicationSettings();
 
-    setupEditor();
+    await setupEditor();
 
     setupContextButtons();
 

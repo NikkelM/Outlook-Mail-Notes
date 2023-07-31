@@ -25,10 +25,10 @@ export function getSettings() {
   return Office.context.roamingSettings;
 }
 
-export function setupCategoryMasterList() {
+export async function setupCategoryMasterList() {
   // Get the categories saved in settings
   const settings = getSettings();
-  let userAddInCategories = settings.get("addinCategories");
+  let userAddInCategories = await settings.get("addinCategories");
   // If there are no categories saved in settings, use the default categories
   if (!userAddInCategories) {
     settings.set("addinCategories", DEFAULT_ADDIN_CATEGORIES);

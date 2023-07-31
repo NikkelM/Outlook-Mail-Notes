@@ -5,11 +5,11 @@ import { CATEGORY_COLORS } from "./constants";
 import { focusEditor, manageNoteCategories } from "./editor";
 import { getSettings, getIdentifiers } from "./officeData";
 
-export function setupApplicationSettings() {
+export async function setupApplicationSettings() {
   const settings = getSettings();
 
   setupSettingsButtonAndVersionNumber();
-  setupCategoryDropdowns(settings);
+  await setupCategoryDropdowns(settings);
 
   setupCategoryNameInputs(settings);
   setupCategoryColorPicker(settings);
@@ -46,7 +46,7 @@ function setupSettingsButtonAndVersionNumber() {
   });
 }
 
-function setupCategoryDropdowns(settings: Office.RoamingSettings) {
+async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   const categoryDropdownsDiv: HTMLDivElement = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
   const messageCategoriesDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
     "messageCategoriesDropdown"
@@ -56,7 +56,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   ) as HTMLSelectElement;
 
   // Set the message categories dropdown to the saved setting
-  const savedMessageCategories = settings.get("messageCategories");
+  const savedMessageCategories = await settings.get("messageCategories");
   if (savedMessageCategories) {
     messageCategoriesDropdown.value = savedMessageCategories;
     if (savedMessageCategories === "noCategories") {
@@ -69,7 +69,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   }
 
   // Set the category context dropdown to the saved setting
-  const savedCategoryContexts = settings.get("categoryContexts");
+  const savedCategoryContexts = await settings.get("categoryContexts");
   if (savedCategoryContexts) {
     categoryContextsDropdown.value = savedCategoryContexts;
   } else {
@@ -78,7 +78,7 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     settings.saveAsync();
   }
 
-  const allNotes = settings.get("notes");
+  const allNotes = await settings.get("notes");
   const { mailId, senderId, conversationId } = getIdentifiers();
 
   // If the user changes the message categories dropdown
@@ -113,10 +113,10 @@ function setupCategoryDropdowns(settings: Office.RoamingSettings) {
   });
 }
 
-function setupCategoryNameInputs(settings: Office.RoamingSettings) {
+async function setupCategoryNameInputs(settings: Office.RoamingSettings) {
   // Get the category input elements
   const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
-  const addinCategories = settings.get("addinCategories");
+  const addinCategories = await settings.get("addinCategories");
 
   categoryInputs.forEach((categoryInput) => {
     // The key in the settings object is the same as the id of the input minus the 'NameInput' suffix
@@ -126,7 +126,7 @@ function setupCategoryNameInputs(settings: Office.RoamingSettings) {
     categoryInput.value = addinCategories[inputId].displayName;
 
     // If the user changes the category name input, update the master category list
-    categoryInput.addEventListener("change", function () {
+    categoryInput.addEventListener("change", async function () {
       // If the name was not changed, do nothing
       if (categoryInput.value === addinCategories[inputId].displayName) {
         return;
@@ -136,7 +136,7 @@ function setupCategoryNameInputs(settings: Office.RoamingSettings) {
         displayName: categoryInput.value,
         color: addinCategories[inputId].color,
       };
-      updateMasterCategories(addinCategories[inputId], newCategory);
+      await updateMasterCategories(addinCategories[inputId], newCategory);
 
       // Save the new name to the settings
       addinCategories[inputId].displayName = categoryInput.value;
@@ -146,10 +146,10 @@ function setupCategoryNameInputs(settings: Office.RoamingSettings) {
   });
 }
 
-function setupCategoryColorPicker(settings: Office.RoamingSettings) {
+async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
   // Get the category input elements
   const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
-  const addinCategories = settings.get("addinCategories");
+  const addinCategories = await settings.get("addinCategories");
 
   categoryInputs.forEach((categoryInput) => {
     // The key in the settings object is the same as the id of the input minus the 'NameInput' suffix
@@ -184,7 +184,7 @@ function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       colorPickerCell.style.backgroundColor = color.value;
       colorPickerCell.title = color.name;
 
-      colorPickerCell.addEventListener("click", function () {
+      colorPickerCell.addEventListener("click", async function () {
         // Update the background color of the button
         colorPickerButton.style.backgroundColor = color.value;
         // Hide the dropdown
@@ -195,7 +195,7 @@ function setupCategoryColorPicker(settings: Office.RoamingSettings) {
           displayName: addinCategories[inputId].displayName,
           color: color.preset,
         };
-        updateMasterCategories(addinCategories[inputId], newCategory);
+        await updateMasterCategories(addinCategories[inputId], newCategory);
 
         // Save the new color to the settings
         addinCategories[inputId].color = color.preset;
@@ -224,7 +224,7 @@ function setupCategoryColorPicker(settings: Office.RoamingSettings) {
   });
 }
 
-function updateMasterCategories(oldCategory: any, newCategory: any) {
+async function updateMasterCategories(oldCategory: any, newCategory: any) {
   // Only remove the master category if the names are different
   const categoryToRemove = [oldCategory.displayName];
   const categoryToAdd = [newCategory];
@@ -264,7 +264,7 @@ function updateMasterCategories(oldCategory: any, newCategory: any) {
           )
         ) {
           await new Promise((resolve) => setTimeout(resolve, 5));
-          Office.context.mailbox.masterCategories.getAsync(options, function (asyncResult) {
+          Office.context.mailbox.masterCategories.getAsync(options, async function (asyncResult) {
             const newMasterCategories = asyncResult.value;
             options.asyncContext = newMasterCategories;
           });
@@ -273,7 +273,7 @@ function updateMasterCategories(oldCategory: any, newCategory: any) {
         // Add the new category to the current item
         const { mailId, senderId, conversationId } = getIdentifiers();
         const settings = getSettings();
-        const allNotes = settings.get("notes");
+        const allNotes = await settings.get("notes");
         manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
       });
     });

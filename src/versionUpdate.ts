@@ -2,9 +2,9 @@
 
 import { ADDIN_VERSION } from "./version";
 
-export function updateVersion(settings: Office.RoamingSettings) {
+export async function updateVersion(settings: Office.RoamingSettings) {
   // Get the current version from the settings object
-  const currentVersion = (settings.get("version")) ?? "0.0.0";
+  const currentVersion = (await settings.get("version")) ?? "0.0.0";
 
   if (currentVersion < ADDIN_VERSION) {
     console.log("Updating Add-In from version " + currentVersion + " to version " + ADDIN_VERSION);
@@ -26,7 +26,7 @@ export function updateVersion(settings: Office.RoamingSettings) {
     if (currentVersion < "1.2.0") {
       // The mailId was changed from using the item.itemId to use item.conversationId_item.dateTimeCreated.toISOString()
       let pre1_2_0Notes = {};
-      const allNotes = settings.get("notes");
+      const allNotes = await settings.get("notes");
 
       // For each note, check if the ID is an itemId
       for (const key in allNotes) {

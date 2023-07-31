@@ -16,13 +16,13 @@ let safetySaveContext: string;
 setupQuill();
 
 // ----- Setup -----
-export function setupEditor(): void {
+export async function setupEditor(): Promise<void> {
   // Get the identifiers for the current item
   ({ mailId, senderId, conversationId, itemSubject, itemNormalizedSubject } = getIdentifiers());
 
   settings = getSettings();
 
-  displayInitialNote();
+  await displayInitialNote();
 
   // Start the autosave timer
   lastKnownContext = getActiveContext();
@@ -57,36 +57,41 @@ function setupQuill(): void {
   });
 }
 
-function displayInitialNote(): void {
+async function displayInitialNote(): Promise<void> {
   // Try to get an existing note for any of the contexts, in descending priority/specificity
-  const allNotes = settings.get("notes");
+  const allNotes = await settings.get("notes");
   let mailNote = allNotes[mailId];
   const conversationNote = allNotes[conversationId];
   const senderNote = allNotes[senderId];
 
   // With v1.2.0, the mailId was changed from using the item.itemId to use item.conversationId_item.dateTimeCreated.toISOString()
   // We need to check if the current item is still using the old ID format, and if so, update it
-  const pre1_2_0Notes = settings.get("pre1_2_0Notes");
+  const pre1_2_0Notes = await settings.get("pre1_2_0Notes");
   if (pre1_2_0Notes) {
     console.log("Checking for pre-1.2.0 note");
-    mailNote = pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
+    mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
   }
 
   if (mailNote) {
-    switchToContext("mail", quill, mailId, settings);
+    await switchToContext("mail", quill, mailId, settings);
   } else if (conversationNote) {
-    switchToContext("conversation", quill, conversationId, settings);
+    await switchToContext("conversation", quill, conversationId, settings);
   } else if (senderNote) {
-    switchToContext("sender", quill, senderId, settings);
+    await switchToContext("sender", quill, senderId, settings);
   } else {
     // The default context is the mail context
-    switchToContext("mail", quill, mailId, settings);
+    await switchToContext("mail", quill, mailId, settings);
   }
 
   manageNoteCategories(mailNote, conversationNote, senderNote);
 }
 
-function pre1_2_0Update(mailId: string, allNotes: any, pre1_2_0Notes: any, settings: Office.RoamingSettings): string {
+async function pre1_2_0Update(
+  mailId: string,
+  allNotes: any,
+  pre1_2_0Notes: any,
+  settings: Office.RoamingSettings
+): Promise<string> {
   // Generate the new ItemId
   const newItemId =
     Office.context.mailbox.item.conversationId +
@@ -165,12 +170,12 @@ function toggleIconSpinner(toSpinner: boolean): void {
   savingIcon.classList.add(toSpinner ? "spinner" : "tick");
 }
 
-function saveNote(): void {
+async function saveNote(): Promise<void> {
   savingIcon.style.visibility = "visible";
 
   const newNoteContents = quill.getContents();
   const activeContext = getActiveContext();
-  const allNotes = settings.get("notes");
+  const allNotes = await settings.get("notes");
 
   const contextMapping = {
     mail: mailId,
@@ -199,10 +204,10 @@ function saveNote(): void {
   }, 1500);
 }
 
-export function manageNoteCategories(mailNote: any, conversationNote: any, senderNote: any): void {
+export async function manageNoteCategories(mailNote: any, conversationNote: any, senderNote: any): Promise<void> {
   // What kind of categories should be added
-  const messageCategories = settings.get("messageCategories");
-  const categoryContexts = settings.get("categoryContexts");
+  const messageCategories = await settings.get("messageCategories");
+  const categoryContexts = await settings.get("categoryContexts");
 
   let validContexts: string[];
   switch (categoryContexts) {
@@ -219,7 +224,7 @@ export function manageNoteCategories(mailNote: any, conversationNote: any, sende
       throw new Error("Invalid categoryContexts setting");
   }
 
-  const allCategories = settings.get("addinCategories");
+  const allCategories = await settings.get("addinCategories");
   // Get the displayName properties of allCategories
   const allCategoryNames = Object.values(allCategories).map((category: any) => category.displayName);
 
