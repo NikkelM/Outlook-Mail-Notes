@@ -1,4 +1,10 @@
-# Outlook-Mail-Notes
+<h1 align="center">Outlook Mail Notes</h1>
+
+<p align="center">
+<a href="https://github.com/NikkelM/Outlook-Mail-Notes/tree/main/CHANGELOG.md">
+  <img src="https://img.shields.io/badge/view-changelog-blue"
+    alt="View changelog"></a>
+</p>
 
 This Add-In allows you to add notes to e-mails in Outlook.
 The notes are synced with your Exchange account, which allows you to access them from anywhere you can access your e-mail.
@@ -7,21 +13,21 @@ The notes are synced with your Exchange account, which allows you to access them
 
 ### Outlook Desktop client
 
-- Use *Home* > *Get Add-Ins* to navigate to the *Add-Ins* page (note that Add-Ins can only be installed in mail clients that are connected to an Exchange server, i.e. IMAP accounts cannot use Add-Ins).
-- Go to the *My Add-Ins* tab, scroll to the bottom and click on the *+ Add a custom add-in* button.
-- Select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
-- The Add-In will now be available in the *Home* tab of your Outlook client. You can use it by selecting an e-mail and clicking on the *Take notes* button.
+- Use _Home_ > _Get Add-Ins_ to navigate to the _Add-Ins_ page (note that Add-Ins can only be installed in mail clients that are connected to an Exchange server, i.e. IMAP accounts cannot use Add-Ins).
+- Go to the _My Add-Ins_ tab, scroll to the bottom and click on the _+ Add a custom add-in_ button.
+- Select _Add from URL_ and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
+- The Add-In will now be available in the _Home_ tab of your Outlook client. You can use it by selecting an e-mail and clicking on the _Take notes_ button.
 
 ### Outlook for the Web
 
-- Using Outlook for the Web, click on the gear icon in the top right corner and select *Manage Add-Ins*.
-- Use the *+* button to add a new Add-In.
-- Select *Add from URL* and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
+- Using Outlook for the Web, click on the gear icon in the top right corner and select _Manage Add-Ins_.
+- Use the _+_ button to add a new Add-In.
+- Select _Add from URL_ and enter the following URL: `https://nikkelm.dev/Outlook-Mail-Notes/manifest.xml`
 - The Add-In will now be available when viewing an e-mail, its icon will be visible in the top right corner of the e-mail.
 
 ## Updates
 
-*TL;DR: Updates to the Add-In's main functionality will be automatically applied, but updates to the Add-In's `manifest.xml` file require a re-installation due to how Add-In sideloading works.*
+_TL;DR: Updates to the Add-In's main functionality will be automatically applied, but updates to the Add-In's `manifest.xml` file require a re-installation due to how Add-In sideloading works._
 
 Office Add-Ins are hosted on the developer's server - in the case of this Add-In, this is `https://nikkelm.dev`.
 All files, such as the displayed note editor and relevant background logic are hosted on this server, and not downloaded to your machine.
@@ -32,7 +38,7 @@ This means that in the case that anything in this file is changed, this will not
 Unless the Add-In breaks, and until I am able to add an option to export/import notes, I highly discourage you from doing this, as all of your notes will be lost.
 Changes to the `manifest.xml` file will not happen frequently, as doing so is only necessary when adding new ways to interact with the Add-In from within the Outlook client.
 
-In any case, always feel free to open an [issue](https://github.com/NikkelM/Outlook-Mail-Notes/issues) if you have any questions or concerns.  
+In any case, always feel free to open an [issue](https://github.com/NikkelM/Outlook-Mail-Notes/issues) if you have any questions or concerns.
 
 ## Contribute
 
@@ -40,7 +46,7 @@ In any case, always feel free to open an [issue](https://github.com/NikkelM/Outl
 - Run `npm install` to install all required dependencies.
 - To start a development server, use `npm run watch`. To also automatically register the Add-In in your Outlook desktop client, use `npm start` instead.
 
-----
+---
 
 Do you have any feedback or questions? Feel free to open an [issue](https://github.com/NikkelM/Outlook-Mail-Notes/issues).
 
