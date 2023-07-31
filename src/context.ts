@@ -2,6 +2,7 @@
 /* global document, Office */
 
 import Quill from "quill";
+import { focusEditor } from "./editor";
 import { getIdentifiers, getSettings } from "./officeData";
 
 const contextButtons = {
@@ -11,10 +12,12 @@ const contextButtons = {
 };
 let activeContext;
 
-for (const [key, button] of Object.entries(contextButtons)) {
-  button.addEventListener("click", () => {
-    switchToContext(key);
-  });
+export function setupContextButtons(): void {
+  for (const [key, button] of Object.entries(contextButtons)) {
+    button.addEventListener("click", () => {
+      switchToContext(key);
+    });
+  }
 }
 
 export function getActiveContext(): string {
@@ -81,4 +84,6 @@ async function loadNoteForContext(context: string, quill?: Quill, itemId?: strin
 
   let noteContents = allNotes[itemId]?.noteContents ?? null;
   quill.setContents(noteContents);
+
+  focusEditor();
 }

@@ -1,9 +1,11 @@
 // Contains the logic for the main Add-In taskpane
 /* global document, Office */
 
-import { getSettings } from "./officeData";
+import { getSettings, setupCategoryMasterList } from "./officeData";
 import { updateVersion } from "./versionUpdate";
 import { setupEditor } from "./editor";
+import { setupApplicationSettings } from "./settings";
+import { setupContextButtons } from "./context";
 
 let settings: Office.RoamingSettings;
 
@@ -13,7 +15,15 @@ Office.onReady(async (info) => {
     settings = getSettings();
     await updateVersion(settings);
 
+    // Make sure the category master list is set up correctly
+    // Users can manually delete categories, so we need to re-add them if necessary
+    await setupCategoryMasterList();
+
+    await setupApplicationSettings();
+
     await setupEditor();
+
+    setupContextButtons();
 
     fadeOutOverlay();
   } else {

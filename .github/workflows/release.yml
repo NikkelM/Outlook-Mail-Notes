@@ -49,11 +49,13 @@ jobs:
 
       - name: Create Release notes
         run: |
-          echo "## What's Changed
-
-          " > CHANGELOG.md
-          LAST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          git log --pretty=format:'* %s' $LAST_TAG..HEAD >> CHANGELOG.md
+            echo "## What's Changed
+            
+            " > RELEASE_NOTES.md
+            sed -n '/<!--Releasenotes start-->/,/<!--Releasenotes end-->/p' CHANGELOG.md >> RELEASE_NOTES.md
+            echo "
+  
+            **[Full Changelog](CHANGELOG.md)**" >> RELEASE_NOTES.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v1

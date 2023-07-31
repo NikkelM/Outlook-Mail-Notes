@@ -12,7 +12,9 @@
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
   <!-- Template styles -->
-  <link href="taskpane.css" rel="stylesheet" type="text/css" />
+  <link href="css/taskpane.css" rel="stylesheet" type="text/css" />
+  <link href="css/editor.css" rel="stylesheet" type="text/css" />
+  <link href="css/settings.css" rel="stylesheet" type="text/css" />
 
   <!-- Quill -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -49,6 +51,46 @@
 
     <!-- Create the Quill container -->
     <div id="noteInput"></div>
+
+    <!-- Add a button that overlays the settings -->
+    <div id="settingsDiv" class="settings-div">
+        <p id="versionNumber" class="version-number"></p>
+        <button id="settingsButton" title="Toggle the settings menu" class="settings-button">
+          <img src="../assets/settings.webp" width="20px" height="20px"/>
+        </button>
+      <div id="settingContentDiv" class="settings-content align-center">
+        <h3>Settings</h3>
+        <div class="settingDiv">
+          <div id="categoryDropdownsDiv">
+            <label>Control how categories are used to label messages with attached notes:</label>
+            <select id="messageCategoriesDropdown" class="dropdown">
+              <option value="mailNotes">Use a "Mail Notes" category for...</option>
+              <option value="unique">Use a unique category for...</option>
+              <option value="noCategories">Don't set categories</option>
+            </select>
+            <select id="categoryContextsDropdown" class="dropdown">
+              <option value="all">...messages, conversations and senders</option>
+              <option value="messagesConversations">...messages and conversations</option>
+              <option value="messages">...messages only</option>
+            </select>
+            <!-- Input fields for each context, to choose the name and color of the category -->
+            <div id="categoryNamesInputsDiv" style="margin-top: 15px;">
+              <label>Customize your categories:</label>
+              <p><i>When <b>renaming</b> a category, you will need to manually remove categories of this type from other messages, doing so automatically is not supported by Outlook!</i></p>
+              <!-- The ID of the input must be the key of the category saved in settings + 'NameInput' -->
+              <input id="generalCategoryNameInput" class="category-input" placeholder="Mail Notes" 
+                value="Mail Notes" title="Set the name of the category to use for all notes and contexts."/>
+              <input id="messageCategoryNameInput" class="category-input" placeholder="Mail Notes - Mail Notes" 
+                value="Message - Mail Notes" title="Set the category name to use for mails with message notes." />
+              <input id="conversationCategoryNameInput" class="category-input" placeholder="Conversation - Mail Notes" 
+                value="Conversation - Mail Notes" title="Set the category name to use for mails with attached conversation notes." />
+              <input id="senderCategoryNameInput" class="category-input" placeholder="Sender - Mail Notes" 
+                value="Sender - Mail Notes" title="Set the category name to use for mails with attached sender notes." />
+            </div>
+            <p><i>If you delete a conversation or sender note on one message, the corresponding categories for other messages will only be updated when you open the Add-In on them.</i></p>
+        </div>
+      </div>
+    </div>
   </main>
 
 </body>
