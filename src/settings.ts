@@ -52,22 +52,23 @@ function setupCategoryCustomization(settings: Office.RoamingSettings) {
 }
 
 async function showRelevantCustomization(settings: Office.RoamingSettings) {
-  const categoryNamesInputsDiv: HTMLDivElement = document.getElementById("categoryNamesInputsDiv") as HTMLDivElement;
-  const generalCategoryCustomization: HTMLDivElement = document.getElementById(
-    "generalCategoryCustomization"
-  ) as HTMLDivElement;
-  const messageCategoryCustomization: HTMLDivElement = document.getElementById(
-    "messageCategoryCustomization"
-  ) as HTMLDivElement;
-  const conversationCategoryCustomization: HTMLDivElement = document.getElementById(
+  const categoryNamesInputsDiv = document.getElementById("categoryNamesInputsDiv") as HTMLDivElement;
+  const generalCategoryCustomization = document.getElementById("generalCategoryCustomization") as HTMLDivElement;
+  const messageCategoryCustomization = document.getElementById("messageCategoryCustomization") as HTMLDivElement;
+  const conversationCategoryCustomization = document.getElementById(
     "conversationCategoryCustomization"
   ) as HTMLDivElement;
-  const senderCategoryCustomization: HTMLDivElement = document.getElementById(
-    "senderCategoryCustomization"
-  ) as HTMLDivElement;
+  const senderCategoryCustomization = document.getElementById("senderCategoryCustomization") as HTMLDivElement;
 
   const messageCategories = await settings.get("messageCategories");
   const categoryContexts = await settings.get("categoryContexts");
+
+  // By default, hide all customization options
+  generalCategoryCustomization.classList.add("removed");
+  messageCategoryCustomization.classList.add("removed");
+  conversationCategoryCustomization.classList.add("removed");
+  senderCategoryCustomization.classList.add("removed");
+  categoryNamesInputsDiv.classList.add("removed");
 
   switch (messageCategories) {
     case "mailNotes":
@@ -78,7 +79,6 @@ async function showRelevantCustomization(settings: Office.RoamingSettings) {
       categoryNamesInputsDiv.classList.remove("removed");
       break;
     case "unique":
-      generalCategoryCustomization.classList.add("removed");
       categoryNamesInputsDiv.classList.remove("removed");
       if (categoryContexts === "all") {
         messageCategoryCustomization.classList.remove("removed");
@@ -97,11 +97,6 @@ async function showRelevantCustomization(settings: Office.RoamingSettings) {
       }
       break;
     case "noCategories":
-      generalCategoryCustomization.classList.add("removed");
-      messageCategoryCustomization.classList.add("removed");
-      conversationCategoryCustomization.classList.add("removed");
-      senderCategoryCustomization.classList.add("removed");
-      categoryNamesInputsDiv.classList.add("removed");
       break;
     default:
       throw new Error("Invalid message categories");
@@ -109,11 +104,11 @@ async function showRelevantCustomization(settings: Office.RoamingSettings) {
 }
 
 async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
-  const categoryDropdownsDiv: HTMLDivElement = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
-  const messageCategoriesDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
+  const categoryDropdownsDiv = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
+  const messageCategoriesDropdown = categoryDropdownsDiv.children.namedItem(
     "messageCategoriesDropdown"
   ) as HTMLSelectElement;
-  const categoryContextsDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
+  const categoryContextsDropdown = categoryDropdownsDiv.children.namedItem(
     "categoryContextsDropdown"
   ) as HTMLSelectElement;
 
