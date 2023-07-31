@@ -73,10 +73,10 @@
               <option value="messagesConversations">...messages and conversations</option>
               <option value="messages">...messages only</option>
             </select>
-            <p><i>Note that unfortunately categories can only be updated when the Add-In is opened on a message.</i></p>
             <!-- Input fields for each context, to choose the name and color of the category -->
-            <div id="categoryNamesInputsDiv">
+            <div id="categoryNamesInputsDiv" style="margin-top: 15px;">
               <label>Customize your categories:</label>
+              <p><i>When <b>renaming</b> a category, you will need to manually remove categories of this type from other messages, doing so automatically is not supported by Outlook!</i></p>
               <!-- The ID of the input must be the key of the category saved in settings + 'NameInput' -->
               <input id="generalCategoryNameInput" class="category-input" placeholder="Mail Notes" 
                 value="Mail Notes" title="Set the name of the category to use for all notes and contexts."/>
@@ -87,6 +87,7 @@
               <input id="senderCategoryNameInput" class="category-input" placeholder="Sender - Mail Notes" 
                 value="Sender - Mail Notes" title="Set the category name to use for mails with attached sender notes." />
             </div>
+            <p><i>Note that unfortunately categories can only be updated when the Add-In is opened on a message.</i></p>
         </div>
       </div>
     </div>
