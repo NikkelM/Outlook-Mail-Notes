@@ -184,11 +184,21 @@ async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       colorPickerCell.style.backgroundColor = color.value;
       colorPickerCell.title = color.name;
 
+      // If this color is the active color, add the .active-color class
+      if (color.preset === addinCategories[inputId].color) {
+        colorPickerCell.classList.add("active-color");
+      }
+
       colorPickerCell.addEventListener("click", async function () {
         // Update the background color of the button
         colorPickerButton.style.backgroundColor = color.value;
         // Hide the dropdown
         colorPickerDropdown.style.display = "none";
+
+        // Change the active-color class
+        const activeColor = colorPickerGrid.querySelector(".active-color");
+        activeColor.classList.remove("active-color");
+        colorPickerCell.classList.add("active-color");
 
         // Update the master category list
         const newCategory = {

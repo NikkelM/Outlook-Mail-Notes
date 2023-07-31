@@ -151,6 +151,11 @@ select.dropdown:focus:hover {
   height: 20px;
   border: 1px solid #333;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.color-picker-cell.active-color {
+  border: 3px solid black;
 }
 
 .color-picker-cell.none {
