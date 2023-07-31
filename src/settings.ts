@@ -256,10 +256,15 @@ async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       }
 
       colorPickerCell.addEventListener("click", async function () {
-        // Update the background color of the button
-        colorPickerButton.style.backgroundColor = color.value;
         // Hide the dropdown
         colorPickerDropdown.style.display = "none";
+
+        if (color.preset === addinCategories[inputId].color) {
+          return;
+        }
+
+        // Update the background color of the button
+        colorPickerButton.style.backgroundColor = color.value;
 
         // Change the active-color class
         const activeColor = colorPickerGrid.querySelector(".active-color");
