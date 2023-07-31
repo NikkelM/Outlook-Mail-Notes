@@ -296,6 +296,13 @@ async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       } else {
         colorPickerDropdown.style.display = "none";
       }
+      // While it is open, clicking anywhere not in the dropdown will close it
+      document.addEventListener("click", function closeDropdown(event: any) {
+        if (!colorPicker.contains(event.target)) {
+          colorPickerDropdown.style.display = "none";
+          document.removeEventListener("click", closeDropdown);
+        }
+      });
     });
   });
 }
