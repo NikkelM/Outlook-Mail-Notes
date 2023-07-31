@@ -260,17 +260,21 @@ export async function manageNoteCategories(mailNote: any, conversationNote: any,
   setItemCategories(addCategories, removeCategories);
 }
 
-// Set exactly the categories passed as parameter, and remove all
 function setItemCategories(addCategories: string[], removeCategories: string[]): void {
   if (removeCategories.length > 0) {
     Office.context.mailbox.item.categories.removeAsync(removeCategories, function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
         console.log("Removing category failed with error: " + asyncResult.error.message);
       }
+      if (addCategories.length > 0) {
+        Office.context.mailbox.item.categories.addAsync(addCategories, function (asyncResult) {
+          if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+            console.log("Setting category failed with error: " + asyncResult.error.message);
+          }
+        });
+      }
     });
-  }
-
-  if (addCategories.length > 0) {
+  } else if (addCategories.length > 0) {
     Office.context.mailbox.item.categories.addAsync(addCategories, function (asyncResult) {
       if (asyncResult.status === Office.AsyncResultStatus.Failed) {
         console.log("Setting category failed with error: " + asyncResult.error.message);
