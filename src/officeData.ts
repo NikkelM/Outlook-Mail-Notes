@@ -1,5 +1,7 @@
 // This file contains handlers for data the add-in gets from the Office API
 
+import { DEFAULT_ADDIN_CATEGORIES } from "./constants";
+
 export function getIdentifiers() {
   // Get references to the mailbox and the current item
   let mailbox: Office.Mailbox = Office.context.mailbox;
@@ -24,34 +26,14 @@ export function getSettings() {
 }
 
 export async function setupCategoryMasterList() {
-  console.log("Setting up category master list...");
-  const defaultAddInCategories = {
-    generalCategory: {
-      displayName: "Mail Notes",
-      color: "Preset7",
-    },
-    messageCategory: {
-      displayName: "Message - Mail Notes",
-      color: "Preset6",
-    },
-    conversationCategory: {
-      displayName: "Conversation - Mail Notes",
-      color: "Preset5",
-    },
-    senderCategory: {
-      displayName: "Sender - Mail Notes",
-      color: "Preset8",
-    },
-  };
-
   // Get the categories saved in settings
   const settings = getSettings();
   let userAddInCategories = await settings.get("addinCategories");
   // If there are no categories saved in settings, use the default categories
   if (!userAddInCategories) {
-    settings.set("addinCategories", defaultAddInCategories);
+    settings.set("addinCategories", DEFAULT_ADDIN_CATEGORIES);
     settings.saveAsync();
-    userAddInCategories = defaultAddInCategories;
+    userAddInCategories = DEFAULT_ADDIN_CATEGORIES;
   }
 
   // For each category, make sure it exists in the master list
@@ -61,7 +43,12 @@ export async function setupCategoryMasterList() {
     // Add all categories that don't exist yet
     let categoriesToAdd = [];
     addinCategories.forEach((category: any) => {
-      if (!masterCategories.find((masterCategory) => masterCategory.displayName === category.displayName)) {
+      if (
+        !masterCategories.find(
+          (masterCategory) =>
+            masterCategory.displayName === category.displayName && masterCategory.color === category.color
+        )
+      ) {
         categoriesToAdd.push(category);
       }
     });

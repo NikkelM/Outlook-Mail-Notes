@@ -25,3 +25,22 @@ export const CATEGORY_COLORS = [
   { name: "Dark Purple", value: "#684697", preset: "Preset23" },
   { name: "Dark Pink", value: "#8c0059", preset: "Preset24" },
 ];
+
+export const DEFAULT_ADDIN_CATEGORIES = {
+  generalCategory: {
+    displayName: "Mail Notes",
+    color: "Preset7",
+  },
+  messageCategory: {
+    displayName: "Message - Mail Notes",
+    color: "Preset6",
+  },
+  conversationCategory: {
+    displayName: "Conversation - Mail Notes",
+    color: "Preset5",
+  },
+  senderCategory: {
+    displayName: "Sender - Mail Notes",
+    color: "Preset8",
+  },
+};
