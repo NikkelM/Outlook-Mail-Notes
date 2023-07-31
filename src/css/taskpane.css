@@ -24,7 +24,6 @@ main {
   flex-wrap: nowrap;
   -webkit-align-items: center;
   align-items: center;
-  min-width: 300px;
 }
 
 /* Utilities */
@@ -37,11 +36,11 @@ main {
 }
 
 .hidden {
-  visibility: hidden;
+  visibility: hidden !important;
 }
 
 .removed {
-  display: none;
+  display: none !important;
 }
 
 .overlay {

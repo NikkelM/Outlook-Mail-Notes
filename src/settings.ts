@@ -11,8 +11,7 @@ export async function setupApplicationSettings() {
   setupSettingsButtonAndVersionNumber();
   await setupCategoryDropdowns(settings);
 
-  setupCategoryNameInputs(settings);
-  setupCategoryColorPicker(settings);
+  setupCategoryCustomization(settings);
 }
 
 function setupSettingsButtonAndVersionNumber() {
@@ -46,12 +45,70 @@ function setupSettingsButtonAndVersionNumber() {
   });
 }
 
+function setupCategoryCustomization(settings: Office.RoamingSettings) {
+  showRelevantCustomization(settings);
+  setupCategoryNameInputs(settings);
+  setupCategoryColorPicker(settings);
+}
+
+async function showRelevantCustomization(settings: Office.RoamingSettings) {
+  const categoryNamesInputsDiv = document.getElementById("categoryNamesInputsDiv") as HTMLDivElement;
+  const generalCategoryCustomization = document.getElementById("generalCategoryCustomization") as HTMLDivElement;
+  const messageCategoryCustomization = document.getElementById("messageCategoryCustomization") as HTMLDivElement;
+  const conversationCategoryCustomization = document.getElementById(
+    "conversationCategoryCustomization"
+  ) as HTMLDivElement;
+  const senderCategoryCustomization = document.getElementById("senderCategoryCustomization") as HTMLDivElement;
+
+  const messageCategories = await settings.get("messageCategories");
+  const categoryContexts = await settings.get("categoryContexts");
+
+  // By default, hide all customization options
+  generalCategoryCustomization.classList.add("removed");
+  messageCategoryCustomization.classList.add("removed");
+  conversationCategoryCustomization.classList.add("removed");
+  senderCategoryCustomization.classList.add("removed");
+  categoryNamesInputsDiv.classList.add("removed");
+
+  switch (messageCategories) {
+    case "mailNotes":
+      generalCategoryCustomization.classList.remove("removed");
+      messageCategoryCustomization.classList.add("removed");
+      conversationCategoryCustomization.classList.add("removed");
+      senderCategoryCustomization.classList.add("removed");
+      categoryNamesInputsDiv.classList.remove("removed");
+      break;
+    case "unique":
+      categoryNamesInputsDiv.classList.remove("removed");
+      if (categoryContexts === "all") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.remove("removed");
+        senderCategoryCustomization.classList.remove("removed");
+      } else if (categoryContexts === "messagesConversations") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.remove("removed");
+        senderCategoryCustomization.classList.add("removed");
+      } else if (categoryContexts === "messages") {
+        messageCategoryCustomization.classList.remove("removed");
+        conversationCategoryCustomization.classList.add("removed");
+        senderCategoryCustomization.classList.add("removed");
+      } else {
+        throw new Error("Invalid category context");
+      }
+      break;
+    case "noCategories":
+      break;
+    default:
+      throw new Error("Invalid message categories");
+  }
+}
+
 async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
-  const categoryDropdownsDiv: HTMLDivElement = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
-  const messageCategoriesDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
+  const categoryDropdownsDiv = document.getElementById("categoryDropdownsDiv") as HTMLDivElement;
+  const messageCategoriesDropdown = categoryDropdownsDiv.children.namedItem(
     "messageCategoriesDropdown"
   ) as HTMLSelectElement;
-  const categoryContextsDropdown: HTMLSelectElement = categoryDropdownsDiv.children.namedItem(
+  const categoryContextsDropdown = categoryDropdownsDiv.children.namedItem(
     "categoryContextsDropdown"
   ) as HTMLSelectElement;
 
@@ -96,6 +153,8 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     settings.set("messageCategories", selectedCategory);
     settings.saveAsync();
 
+    showRelevantCustomization(settings);
+
     // Update the categories live
     manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
   });
@@ -107,6 +166,8 @@ async function setupCategoryDropdowns(settings: Office.RoamingSettings) {
     // Save the selected setting to the Office Roaming Settings
     settings.set("categoryContexts", selectedContext);
     settings.saveAsync();
+
+    showRelevantCustomization(settings);
 
     // Update the categories live
     manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
@@ -190,10 +251,15 @@ async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       }
 
       colorPickerCell.addEventListener("click", async function () {
-        // Update the background color of the button
-        colorPickerButton.style.backgroundColor = color.value;
         // Hide the dropdown
         colorPickerDropdown.style.display = "none";
+
+        if (color.preset === addinCategories[inputId].color) {
+          return;
+        }
+
+        // Update the background color of the button
+        colorPickerButton.style.backgroundColor = color.value;
 
         // Change the active-color class
         const activeColor = colorPickerGrid.querySelector(".active-color");
@@ -230,6 +296,13 @@ async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
       } else {
         colorPickerDropdown.style.display = "none";
       }
+      // While it is open, clicking anywhere not in the dropdown will close it
+      document.addEventListener("click", function closeDropdown(event: any) {
+        if (!colorPicker.contains(event.target)) {
+          colorPickerDropdown.style.display = "none";
+          document.removeEventListener("click", closeDropdown);
+        }
+      });
     });
   });
 }
