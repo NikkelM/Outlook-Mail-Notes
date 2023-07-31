@@ -235,18 +235,19 @@ function updateMasterCategories(oldCategory: any, newCategory: any) {
         asyncContext: [],
       };
 
-      do {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        Office.context.mailbox.masterCategories.getAsync(options, function (asyncResult) {
-          const newMasterCategories = asyncResult.value;
-          options.asyncContext = newMasterCategories;
-        });
-      } while (
+      while (
+        options.asyncContext.length === 0 ||
         options.asyncContext.find(
           (masterCategory) =>
             masterCategory.displayName === oldCategory.displayName && masterCategory.color === oldCategory.color
         )
-      );
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        Office.context.mailbox.masterCategories.getAsync(options, function (asyncResult) {
+          const newMasterCategories = asyncResult.value;
+          options.asyncContext = newMasterCategories;
+        });
+      }
 
       Office.context.mailbox.masterCategories.addAsync(categoryToAdd, async function (asyncResult) {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
@@ -262,7 +263,7 @@ function updateMasterCategories(oldCategory: any, newCategory: any) {
               masterCategory.displayName === newCategory.displayName && masterCategory.color === newCategory.color
           )
         ) {
-          await new Promise((resolve) => setTimeout(resolve, 10));
+          await new Promise((resolve) => setTimeout(resolve, 5));
           Office.context.mailbox.masterCategories.getAsync(options, function (asyncResult) {
             const newMasterCategories = asyncResult.value;
             options.asyncContext = newMasterCategories;
