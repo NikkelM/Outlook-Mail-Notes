@@ -64,7 +64,7 @@ jobs:
         with:
           tag_name: v${{ needs.CheckVersion.outputs.newVersion }}
           name: v${{ needs.CheckVersion.outputs.newVersion }}
-          body_path: CHANGELOG.md
+          body_path: RELEASE_NOTES.md
 
   RunDeployScript:
     needs: CheckVersion
