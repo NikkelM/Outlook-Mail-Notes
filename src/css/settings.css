@@ -3,6 +3,7 @@
   display: flex;
   justify-content: space-between;
   width: 90%;
+  height: 5vh;
 }
 
 .settings-div .version-number {
@@ -22,6 +23,9 @@
   color: #333;
   font-size: 16px;
   cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
   z-index: 10;
 }
 
