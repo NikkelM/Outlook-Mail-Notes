@@ -1,12 +1,16 @@
 # Changelog
 
-## v1.2.1
+## v1.2.2
 
 <!--Releasenotes start-->
+- Updated the settings icon's file format to ensure cross-browser compatibility.
+<!--Releasenotes end-->
+
+## v1.2.1
+
 - Only relevant customization options - depending on other chosen settings - will now be shown.
 - Added descriptions next to the category customization inputs in the settings menu.
 - Clicking anywhere outside of it will now close a colour picker.
-<!--Releasenotes end-->
 
 ## v1.2.0
 
