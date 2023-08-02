@@ -12,6 +12,7 @@ header {
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
+  -ms-flex-direction: column;
   align-items: center;
 }
 
@@ -20,8 +21,10 @@ main {
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
+  -ms-flex-direction: column;
   -webkit-flex-wrap: nowrap;
   flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
   -webkit-align-items: center;
   align-items: center;
 }
@@ -62,7 +65,9 @@ main {
 /* Buttons */
 /* The button container */
 #contextButtons {
+  display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: space-around;
   justify-content: space-around;
   width: 90%;
   margin: 15px 0 10px 0;
@@ -70,6 +75,7 @@ main {
 
 #contextButtons button {
   padding: 0;
+  -webkit-flex: 1;
   flex: 1;
   width: 33%;
   margin: 0 2px;

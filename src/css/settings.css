@@ -18,19 +18,19 @@
 }
 
 .settings-div .settings-button {
+  position: absolute;
+  bottom: 28px;
+  right: 15px;
   background-color: transparent;
   border: none;
-  color: #333;
   font-size: 16px;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
   z-index: 10;
 }
 
 /* Spin the img if the button is hovered */
 .settings-div .settings-button:hover img {
+  -ms-animation: spin 3s infinite linear;
   animation: spin 3s infinite linear;
 }
 
@@ -86,6 +86,7 @@ select.dropdown {
   color: rgb(50, 49, 48);
   font-size: 14px;
   font-weight: 400;
+  -ms-box-sizing: border-box;
   box-sizing: border-box;
   border: 1px solid #333;
 }
@@ -102,6 +103,8 @@ select.dropdown:focus:hover {
 .color-picker {
   position: relative;
   display: inline-block;
+  /* zoom: 1;
+  display: inline; */
 }
 
 .color-picker-button {
@@ -124,6 +127,7 @@ select.dropdown:focus:hover {
   padding: 5px;
   border: 1px solid #ccc;
   background-color: #fff;
+  -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   pointer-events: none;
 }
@@ -140,6 +144,8 @@ select.dropdown:focus:hover {
   border: 1px solid #333;
   cursor: pointer;
   box-sizing: border-box;
+  /* display: table-cell;
+  vertical-align: middle; */
 }
 
 .color-picker-cell.active-color {
@@ -178,6 +184,7 @@ select.dropdown:focus:hover {
   color: rgb(50, 49, 48);
   font-size: 14px;
   font-weight: 400;
+  -ms-box-sizing: border-box;
   box-sizing: border-box;
   border: 1px solid #333;
 }

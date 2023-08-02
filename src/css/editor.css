@@ -2,8 +2,8 @@
 #noteInput {
   width: 90%;
   max-width: 90%;
-  height: 75vh;
-  max-height: 75vh;
+  height: 70vh;
+  max-height: 70vh;
   font-size: 16px;
   color: #333;
   background-color: #fff;
@@ -36,6 +36,7 @@
   border: 2px solid transparent;
   border-top-color: #222;
   border-right-color: #222;
+  -webkit-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
 
@@ -46,6 +47,7 @@
   border-style: solid;
   border-width: 0 2.5px 2.5px 0;
   border-color: #555;
+  -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
   margin-right: 4px;
 }
