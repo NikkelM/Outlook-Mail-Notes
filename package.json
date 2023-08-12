@@ -13,9 +13,9 @@
 		"dev_server_port": 3000
 	},
 	"scripts": {
-		"build": "webpack --mode production",
-		"build:dev": "webpack --mode development",
-		"dev": "webpack serve --mode development",
+		"build": "npm run prebuild & webpack --mode production",
+		"build:dev": "npm run prebuild & webpack --mode development",
+		"dev": "npm run prebuild & webpack serve --mode development",
 		"lint": "office-addin-lint check",
 		"lint:fix": "office-addin-lint fix",
 		"prettier": "office-addin-lint prettier",
