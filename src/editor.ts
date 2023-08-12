@@ -2,7 +2,7 @@ import Quill from "quill";
 var Delta = Quill.import("delta");
 
 import { getSettings, getIdentifiers } from "./officeData";
-import { getActiveContext, switchToContext } from "./context";
+import { getActiveContext, switchToContext, updateLastEditedNotice } from "./context";
 
 export let quill: Quill;
 let mailId: string, senderId: string, conversationId: string, itemSubject: string, itemNormalizedSubject: string;
@@ -195,6 +195,8 @@ async function saveNote(): Promise<void> {
   settings.set("notes", allNotes);
   settings.saveAsync();
   manageNoteCategories(allNotes[mailId], allNotes[conversationId], allNotes[senderId]);
+
+  updateLastEditedNotice(contextMapping[activeContext], allNotes);
 
   // Hide the icon after a timeout
   setTimeout(() => {

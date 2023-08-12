@@ -60,3 +60,11 @@
     transform: rotate(360deg);
   }
 }
+
+/* Last edited notice */
+#lastEditedNotice {
+  width: 90%;
+  max-width: 90%;
+  margin: 0 5px 0 0;
+  font-size: 14px;
+}
