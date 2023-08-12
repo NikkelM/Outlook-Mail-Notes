@@ -3,6 +3,8 @@
 ## v1.2.3
 
 <!--Releasenotes start-->
+- When opening the Add-In window, the most recently edited note is now opened.
+- Added a display for when the current note was last edited.
 - Fixed some layouting on the settings page.
 <!--Releasenotes end-->
 

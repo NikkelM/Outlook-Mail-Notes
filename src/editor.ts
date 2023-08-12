@@ -60,30 +60,51 @@ function setupQuill(): void {
 async function displayInitialNote(): Promise<void> {
   // Try to get an existing note for any of the contexts, in descending priority/specificity
   const allNotes = await settings.get("notes");
-  let mailNote = allNotes[mailId];
-  const conversationNote = allNotes[conversationId];
-  const senderNote = allNotes[senderId];
+  const relevantNotes = [
+    {
+      // This needs to be the first entry, to ensure the pre1_2_0Notes check works correctly
+      note: allNotes[mailId],
+      id: mailId,
+      context: "mail",
+    },
+    {
+      note: allNotes[conversationId],
+      id: conversationId,
+      context: "conversation",
+    },
+    {
+      note: allNotes[senderId],
+      id: senderId,
+      context: "sender",
+    },
+  ];
 
   // With v1.2.0, the mailId was changed from using the item.itemId to use item.conversationId_item.dateTimeCreated.toISOString()
   // We need to check if the current item is still using the old ID format, and if so, update it
   const pre1_2_0Notes = await settings.get("pre1_2_0Notes");
   if (pre1_2_0Notes) {
     console.log("Checking for pre-1.2.0 note");
-    mailNote = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
+    mailId = await pre1_2_0Update(Office.context.mailbox.item.itemId, allNotes, pre1_2_0Notes, settings);
+    relevantNotes[0].id = mailId;
   }
 
-  if (mailNote) {
-    await switchToContext("mail", quill, mailId, settings);
-  } else if (conversationNote) {
-    await switchToContext("conversation", quill, conversationId, settings);
-  } else if (senderNote) {
-    await switchToContext("sender", quill, senderId, settings);
+  relevantNotes.sort((a, b) => {
+    const dateA = new Date(a.note?.lastEdited ?? 0);
+    const dateB = new Date(b.note?.lastEdited ?? 0);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  if (relevantNotes[0].note) {
+    await switchToContext(relevantNotes[0].context, quill, relevantNotes[0].id, settings);
   } else {
     // The default context is the mail context
     await switchToContext("mail", quill, mailId, settings);
   }
 
-  manageNoteCategories(mailNote, conversationNote, senderNote);
+  const mail = relevantNotes.find((note) => note.context === "mail")?.note;
+  const conversation = relevantNotes.find((note) => note.context === "conversation")?.note;
+  const sender = relevantNotes.find((note) => note.context === "sender")?.note;
+  manageNoteCategories(mail, conversation, sender);
 }
 
 async function pre1_2_0Update(
@@ -188,7 +209,7 @@ async function saveNote(): Promise<void> {
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
-    allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString().split("T")[0];
+    allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString();
   }
 
   // Save the note to storage

@@ -17,8 +17,8 @@ let activeContext;
 
 export function setupContextButtons(): void {
   for (const [key, button] of Object.entries(contextButtons)) {
-    button.addEventListener("click", () => {
-      switchToContext(key);
+    button.addEventListener("click", async () => {
+      await switchToContext(key);
     });
   }
 }
@@ -93,7 +93,7 @@ async function loadNoteForContext(context: string, quill?: Quill, itemId?: strin
   focusEditor();
 }
 
-export function updateLastEditedNotice(itemId: string, allNotes: any) {
+export function updateLastEditedNotice(itemId: string, allNotes: any): void {
   let lastEdited = allNotes[itemId]?.lastEdited ?? null;
 
   if (lastEdited) {
@@ -101,8 +101,6 @@ export function updateLastEditedNotice(itemId: string, allNotes: any) {
     const today: any = new Date();
     const yesterday: any = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-
-    console.log(navigator.language);
 
     const dayDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
 

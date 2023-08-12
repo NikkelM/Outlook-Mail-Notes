@@ -34,7 +34,7 @@ export async function updateVersion(settings: Office.RoamingSettings) {
           pre1_2_0Notes[key] = 1;
         }
         // Shorten the last edited string for all notes
-        allNotes[key]["lastEdited"] = allNotes[key]["lastEdited"].split("T")[0];
+        allNotes[key]["lastEdited"] = allNotes[key]["lastEdited"];
       }
 
       if (Object.keys(pre1_2_0Notes).length > 0) {
