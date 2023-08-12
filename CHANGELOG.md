@@ -1,10 +1,16 @@
 # Changelog
 
-## v1.2.2
+## v1.2.3
 
 <!--Releasenotes start-->
-- Updated the settings icon's file format to ensure cross-browser compatibility.
+- When opening the Add-In window, the most recently edited note is now opened.
+- Added a display for when the current note was last edited.
+- Fixed some layouting on the settings page.
 <!--Releasenotes end-->
+
+## v1.2.2
+
+- Updated the settings icon's file format to ensure cross-browser compatibility.
 
 ## v1.2.1
 
