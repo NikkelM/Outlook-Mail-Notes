@@ -98,14 +98,21 @@ export function updateLastEditedNotice(itemId: string, allNotes: any): void {
 
   if (lastEdited) {
     const date: any = new Date(lastEdited);
+    const now: any = new Date();
     const today: any = new Date();
     const yesterday: any = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    const dayDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+    const minuteDiff = Math.floor((now - date) / (1000 * 60));
+    const hourDiff = Math.floor((now - date) / (1000 * 60 * 60));
+    const dayDiff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
 
     let formattedDate;
-    if (date.toDateString() === today.toDateString()) {
+    if (minuteDiff < 1) {
+      formattedDate = "Just now";
+    } else if (hourDiff === 0) {
+      formattedDate = "Less than an hour ago";
+    } else if (date.toDateString() === today.toDateString()) {
       formattedDate = "Today";
     } else if (date.toDateString() === yesterday.toDateString()) {
       formattedDate = "Yesterday";
