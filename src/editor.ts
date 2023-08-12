@@ -1,3 +1,4 @@
+// Contains all logic regarding the note editor, such as setting up Quill and saving
 import Quill from "quill";
 var Delta = Quill.import("delta");
 
