@@ -1,7 +1,7 @@
 // Contains all logic concerning the settings menu
 
 import { ADDIN_VERSION } from "./version";
-import { CATEGORY_COLORS } from "./constants";
+import { CATEGORY_COLORS, IS_IE } from "./constants";
 import { focusEditor, manageNoteCategories } from "./editor";
 import { getSettings, getIdentifiers } from "./officeData";
 
@@ -208,6 +208,11 @@ async function setupCategoryNameInputs(settings: Office.RoamingSettings) {
 }
 
 async function setupCategoryColorPicker(settings: Office.RoamingSettings) {
+  if (IS_IE) {
+    console.log("Customizing category colours is not supported in Internet Explorer.");
+    return;
+  }
+
   // Get the category input elements
   const categoryInputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(".category-input");
   const addinCategories = await settings.get("addinCategories");

@@ -26,6 +26,9 @@ export const CATEGORY_COLORS = [
   { name: "Dark Pink", value: "#8c0059", preset: "Preset24" },
 ];
 
+// Are we running in Internet Explorer mode?
+export const IS_IE: boolean = /MSIE|Trident/.test(window.navigator.userAgent);
+
 export const DEFAULT_ADDIN_CATEGORIES = {
   generalCategory: {
     displayName: "Mail Notes",
