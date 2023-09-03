@@ -16,7 +16,7 @@ async function exportToCSV(): Promise<void> {
   const allNotes = await settings.get("notes");
 
   // Create the CSV file
-  let csvFile = "ID,Note,Last edited,Add-In internal note representation\n";
+  let csvFile = "Note ID,Note,Last edited,Internal representation (must exist when importing notes)\n";
 
   // For each note, add a row to the CSV file
   Object.keys(allNotes).forEach((noteID) => {
@@ -39,7 +39,8 @@ async function exportToCSV(): Promise<void> {
   });
 
   // Download the CSV file
-  downloadCSVFile(csvFile, new Date().toISOString() + ".csv");
+  const fileName = `MailNotes_export_${new Date().toISOString().slice(0, -5)}.csv`;
+  downloadCSVFile(csvFile, fileName);
 }
 
 function getPlainText(delta): string {
