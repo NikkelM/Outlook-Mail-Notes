@@ -1,4 +1,5 @@
 // Contains all logic concerning the settings menu
+/* global document, Office, console, setTimeout */
 
 import { ADDIN_VERSION } from "./version";
 import { CATEGORY_COLORS, IS_IE } from "./constants";

@@ -1,3 +1,5 @@
+/* global window */
+
 export const CATEGORY_COLORS = [
   { name: "Red", value: "#b10e1c", preset: "Preset0" },
   { name: "Orange", value: "#c33400", preset: "Preset1" },

@@ -1,4 +1,5 @@
 // Contains logic that handles the version update process
+/* global Office, console */
 
 import { ADDIN_VERSION } from "./version";
 
@@ -33,8 +34,6 @@ export async function updateVersion(settings: Office.RoamingSettings) {
         if (key.startsWith("AQM")) {
           pre1_2_0Notes[key] = 1;
         }
-        // Shorten the last edited string for all notes
-        allNotes[key]["lastEdited"] = allNotes[key]["lastEdited"];
       }
 
       if (Object.keys(pre1_2_0Notes).length > 0) {

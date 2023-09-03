@@ -1,8 +1,9 @@
 // Contains the logic for importing and exporting notes
+/* global document */
 
 export function exportToCSV(allNotes): void {
   // Create the CSV file
-  let csvFile = "Note ID,Note plaintext,Note styled text,Last edited\n";
+  let csvFile = "ID,Note,Last edited,Add-In internal note representation\n";
 
   // For each note, add a row to the CSV file
   Object.keys(allNotes).forEach((noteID) => {
@@ -14,14 +15,14 @@ export function exportToCSV(allNotes): void {
 
     // Escape commas and double quotes in plaintext
     const escapedPlaintext = plaintext.replace(/\n/g, "\\n").replace(/"/g, '""');
-	const csvPlaintext = `"${escapedPlaintext}"`;
+    const csvPlaintext = `"${escapedPlaintext}"`;
 
     const deltaString = `"${JSON.stringify(delta).replace(/\n/g, "\\n").replace(/"/g, '""')}"`;
 
     const escapedNoteID = `"${noteID.toString().replace(/"/g, '""')}"`;
     const escapedLastEdited = `"${lastEdited.toString().replace(/"/g, '""')}"`;
 
-    csvFile += `${escapedNoteID},${csvPlaintext},${deltaString},${escapedLastEdited}\n`;
+    csvFile += `${escapedNoteID},${csvPlaintext},${escapedLastEdited},${deltaString}\n`;
   });
 
   // Download the CSV file
@@ -44,7 +45,7 @@ function getPlainText(delta): string {
   });
   // If the last character is a newline, omit it
   if (plaintext.slice(-1) === "\n") {
-	plaintext = plaintext.slice(0, -1);
+    plaintext = plaintext.slice(0, -1);
   }
   return plaintext;
 }

@@ -1,5 +1,5 @@
 // Contains the logic for the main Add-In taskpane
-/* global document, Office */
+/* global document, Office, console */
 
 import { getSettings, setupCategoryMasterList } from "./officeData";
 import { updateVersion } from "./versionUpdate";
