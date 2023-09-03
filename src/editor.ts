@@ -1,3 +1,6 @@
+// Contains all logic regarding the note editor, such as setting up Quill and saving
+/* global document, Office, console, setTimeout, clearTimeout, setInterval */
+
 import Quill from "quill";
 var Delta = Quill.import("delta");
 
@@ -5,7 +8,7 @@ import { getSettings, getIdentifiers } from "./officeData";
 import { getActiveContext, switchToContext, updateLastEditedNotice } from "./context";
 
 export let quill: Quill;
-let mailId: string, senderId: string, conversationId: string, itemSubject: string, itemNormalizedSubject: string;
+let mailId: string, senderId: string, conversationId: string;
 let settings: Office.RoamingSettings;
 // Used to determine whether or not to show the autosave icon
 let lastKnownContext: string;
@@ -18,7 +21,7 @@ setupQuill();
 // ----- Setup -----
 export async function setupEditor(): Promise<void> {
   // Get the identifiers for the current item
-  ({ mailId, senderId, conversationId, itemSubject, itemNormalizedSubject } = getIdentifiers());
+  ({ mailId, senderId, conversationId } = getIdentifiers());
 
   settings = getSettings();
 
@@ -209,6 +212,7 @@ async function saveNote(): Promise<void> {
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
+    // We use the full ISO string because we need a proper date to calculate the time since last edit for the notice
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString();
   }
 

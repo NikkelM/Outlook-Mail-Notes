@@ -6,18 +6,45 @@
   height: 5vh;
 }
 
+.settings-div .dynamic-settings-footer {
+  visibility: hidden;
+  z-index: 10;
+}
+
+.settings-div .dynamic-settings-footer.show {
+  visibility: visible;
+}
+
 .settings-div .version-number {
   position: absolute;
   bottom: 25px;
   left: 15px;
-  visibility: hidden;
   font-size: 12px;
   color: #888;
-  z-index: 10;
 }
 
-.settings-div .version-number.show {
-  visibility: visible;
+.settings-div .export-button {
+  position: absolute;
+  bottom: 28px;
+  left: calc(50% - 78px);
+  margin: 0 2px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
+  height: 32px;
+  background-color: rgb(0, 136, 240);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid rgb(0, 136, 240);
+  font-family: "Leelawadee UI Web", sans-serif !important;
+}
+
+.settings-div .export-button:hover,
+.settings-div .export-button:focus {
+  background-color: rgb(0, 94, 166);
+  border: 1px solid rgb(0, 94, 166);
 }
 
 .settings-div .settings-button {

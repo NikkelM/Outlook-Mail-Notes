@@ -1,5 +1,5 @@
 // Contains logic to handle context buttons
-/* global document, Office */
+/* global document, Office, navigator */
 
 import Quill from "quill";
 import { focusEditor } from "./editor";
