@@ -1,7 +1,20 @@
 // Contains the logic for importing and exporting notes
 /* global document */
 
-export function exportToCSV(allNotes): void {
+import { getSettings } from "./officeData";
+
+export function setupNoteExport(): void {
+  // Get the exportButton and add exportToCSV as a click event listener
+  const exportButton = document.getElementById("exportButton");
+  exportButton.addEventListener("click", async () => {
+    await exportToCSV();
+  });
+}
+
+async function exportToCSV(): Promise<void> {
+  const settings = getSettings();
+  const allNotes = await settings.get("notes");
+
   // Create the CSV file
   let csvFile = "ID,Note,Last edited,Add-In internal note representation\n";
 
