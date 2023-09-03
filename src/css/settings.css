@@ -23,6 +23,13 @@
   color: #888;
 }
 
+.settings-div .export-button {
+  position: absolute;
+  bottom: 32px;
+  left: calc(50% - 70px);
+  font-size: 14px;
+}
+
 .settings-div .settings-button {
   position: absolute;
   bottom: 28px;
