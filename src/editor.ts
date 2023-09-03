@@ -212,6 +212,7 @@ async function saveNote(): Promise<void> {
   } else {
     allNotes[contextMapping[activeContext]] = allNotes[contextMapping[activeContext]] ?? {};
     allNotes[contextMapping[activeContext]].noteContents = newNoteContents;
+    // We use the full ISO string because we need a proper date to calculate the time since last edit for the notice
     allNotes[contextMapping[activeContext]].lastEdited = new Date().toISOString();
   }
 
