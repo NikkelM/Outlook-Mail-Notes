@@ -18,29 +18,32 @@ export async function setupApplicationSettings() {
 function setupSettingsButtonAndVersionNumber() {
   const settingsButton = document.getElementById("settingsButton");
   const settingsContentDiv = document.getElementById("settingsContentDiv");
+  const dynamicSettingsFooter = document.getElementById("dynamicSettingsFooter");
 
+  // Get the current version number
   const versionNumber = document.getElementById("versionNumber");
   versionNumber.textContent = `v${ADDIN_VERSION}`;
 
+  // Toggle the settings menu and the dynamic footer content when the settings button is clicked
   settingsButton.addEventListener("click", () => {
     if (!settingsContentDiv.classList.contains("show")) {
       settingsContentDiv.style.pointerEvents = "all";
 
       settingsContentDiv.classList.toggle("show");
-      versionNumber.classList.toggle("show");
+      dynamicSettingsFooter.classList.toggle("show");
 
       settingsContentDiv.style.animation = "fadeIn 0.5s forwards";
-      versionNumber.style.animation = "fadeIn 0.5s forwards";
+      dynamicSettingsFooter.style.animation = "fadeIn 0.5s forwards";
     } else {
       settingsContentDiv.style.pointerEvents = "none";
       focusEditor();
 
       settingsContentDiv.style.animation = "fadeOut 0.5s forwards";
-      versionNumber.style.animation = "fadeOut 0.5s forwards";
+      dynamicSettingsFooter.style.animation = "fadeOut 0.5s forwards";
 
       setTimeout(() => {
         settingsContentDiv.classList.toggle("show");
-        versionNumber.classList.toggle("show");
+        dynamicSettingsFooter.classList.toggle("show");
       }, 500);
     }
   });

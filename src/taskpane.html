@@ -57,10 +57,19 @@
 
     <!-- Add a button that overlays the settings -->
     <div id="settingsDiv" class="settings-div">
+      <!-- These items are the 'footer' of the page -->
+      <span id="dynamicSettingsFooter" class="dynamic-settings-footer">
         <p id="versionNumber" class="version-number"></p>
-        <button id="settingsButton" title="Toggle the settings menu" class="settings-button">
-          <img alt="Settings icon" src="../assets/settings.png" width="20px" height="20px"/>
+        <!-- Export button -->
+        <button id="exportButton" title="Export your notes to CSV" type="button" class="export-button">
+          Export all notes to CSV
         </button>
+      </span>
+      <!-- Open/Close the settings menu -->
+      <button id="settingsButton" title="Toggle the settings menu" class="settings-button">
+        <img alt="Settings icon" src="../assets/settings.png" width="20px" height="20px"/>
+      </button>
+      <!-- End of footer -->
 
       <div id="settingsContentDiv" class="settings-content align-center">
         <h3>Settings</h3>
@@ -104,13 +113,6 @@
             </div>
             <p><i>If you delete a conversation or sender note on one message, the corresponding categories for other messages will only be updated when you open the Add-In on them.</i></p>
           </div>
-
-          <!-- Export button -->
-          <div id="exportDiv" class="exportDiv">
-            <button id="exportButton" title="Export your notes to CSV" type="button" class="export-button">
-              Export all notes to CSV
-            </button>
-        </div>
     </div>
   </main>
 
