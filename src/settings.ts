@@ -17,7 +17,7 @@ export async function setupApplicationSettings() {
 
 function setupSettingsButtonAndVersionNumber() {
   const settingsButton = document.getElementById("settingsButton");
-  const settingsContentDiv = document.getElementById("settingContentDiv");
+  const settingsContentDiv = document.getElementById("settingsContentDiv");
 
   const versionNumber = document.getElementById("versionNumber");
   versionNumber.textContent = `v${ADDIN_VERSION}`;
