@@ -25,9 +25,26 @@
 
 .settings-div .export-button {
   position: absolute;
-  bottom: 32px;
-  left: calc(50% - 70px);
+  bottom: 28px;
+  left: calc(50% - 78px);
+  margin: 0 2px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
+  height: 32px;
+  background-color: rgb(0, 136, 240);
+  color: #fff;
   font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid rgb(0, 136, 240);
+  font-family: "Leelawadee UI Web", sans-serif !important;
+}
+
+.settings-div .export-button:hover,
+.settings-div .export-button:focus {
+  background-color: rgb(0, 94, 166);
+  border: 1px solid rgb(0, 94, 166);
 }
 
 .settings-div .settings-button {
