@@ -1,4 +1,5 @@
 // This file contains handlers for data the add-in gets from the Office API
+/* global Office */
 
 import { DEFAULT_ADDIN_CATEGORIES } from "./constants";
 
