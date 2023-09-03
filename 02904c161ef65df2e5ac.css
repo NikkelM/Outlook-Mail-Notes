@@ -6,31 +6,61 @@
   height: 5vh;
 }
 
-.settings-div .version-number {
+.settings-div .dynamic-settings-footer {
   visibility: hidden;
-  font-size: 12px;
-  color: #888;
   z-index: 10;
 }
 
-.settings-div .version-number.show {
+.settings-div .dynamic-settings-footer.show {
   visibility: visible;
 }
 
+.settings-div .version-number {
+  position: absolute;
+  bottom: 25px;
+  left: 15px;
+  font-size: 12px;
+  color: #888;
+}
+
+.settings-div .export-button {
+  position: absolute;
+  bottom: 28px;
+  left: calc(50% - 78px);
+  margin: 0 2px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 2px;
+  height: 32px;
+  background-color: rgb(0, 136, 240);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid rgb(0, 136, 240);
+  font-family: "Leelawadee UI Web", sans-serif !important;
+}
+
+.settings-div .export-button:hover,
+.settings-div .export-button:focus {
+  background-color: rgb(0, 94, 166);
+  border: 1px solid rgb(0, 94, 166);
+}
+
 .settings-div .settings-button {
+  position: absolute;
+  bottom: 28px;
+  right: 15px;
   background-color: transparent;
   border: none;
-  color: #333;
   font-size: 16px;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
   z-index: 10;
 }
 
 /* Spin the img if the button is hovered */
 .settings-div .settings-button:hover img {
+  -ms-animation: spin 3s infinite linear;
   animation: spin 3s infinite linear;
 }
 
@@ -86,6 +116,7 @@ select.dropdown {
   color: rgb(50, 49, 48);
   font-size: 14px;
   font-weight: 400;
+  -ms-box-sizing: border-box;
   box-sizing: border-box;
   border: 1px solid #333;
 }
@@ -124,6 +155,7 @@ select.dropdown:focus:hover {
   padding: 5px;
   border: 1px solid #ccc;
   background-color: #fff;
+  -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   pointer-events: none;
 }
@@ -178,6 +210,7 @@ select.dropdown:focus:hover {
   color: rgb(50, 49, 48);
   font-size: 14px;
   font-weight: 400;
+  -ms-box-sizing: border-box;
   box-sizing: border-box;
   border: 1px solid #333;
 }
