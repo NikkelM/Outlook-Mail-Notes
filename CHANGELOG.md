@@ -1,13 +1,17 @@
 # Changelog
 
-## v1.3.0
+## v1.3.1
 
 <!--Releasenotes start-->
+- This release includes security updates to dependencies.
+<!--Releasenotes end-->
+
+## v1.3.0
+
 - Added a button on the settings page that allows you to export all your notes to a CSV file.
 - Added a display for when the current note was last edited.
 - When opening the Add-In window, the most recently edited note is now opened.
 - Fixed some layouting on the settings page.
-<!--Releasenotes end-->
 
 ## v1.2.2
 
