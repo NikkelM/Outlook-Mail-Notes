@@ -231,6 +231,7 @@ async function saveNote(): Promise<void> {
   }, 1500);
 }
 
+// TODO: Can we make sure the mail notes categories are added to the bottom of the list, so they don't take precedence over other categories when e.g. grouping by categories?
 export async function manageNoteCategories(mailNote: any, conversationNote: any, senderNote: any): Promise<void> {
   // What kind of categories should be added
   const messageCategories = await settings.get("messageCategories");
