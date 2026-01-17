@@ -1,10 +1,14 @@
 # Changelog
 
-## v1.3.1
+## v1.3.2
 
 <!--Releasenotes start-->
 - This release includes security updates to dependencies.
 <!--Releasenotes end-->
+
+## v1.3.1
+
+- This release includes security updates to dependencies.
 
 ## v1.3.0
 
