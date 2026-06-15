@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.9",
-		"@babel/core": "^7.22.9",
+		"@babel/core": "^7.29.6",
 		"@babel/preset-env": "^7.22.9",
 		"@babel/preset-typescript": "^7.13.0",
 		"@types/office-js": "^1.0.256",
